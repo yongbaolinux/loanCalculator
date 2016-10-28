@@ -91,9 +91,8 @@ public class DrawView extends View {
         mPaintCircle = new Paint();
         mPaintCircle.setStyle(Paint.Style.FILL); //实心圆还是空心圆
         mPaintCircle.setAntiAlias(true);         //抗锯齿效果
-        mPaintCircle.setColor(Color.argb(255, 129, 146, 214));
+        mPaintCircle.setColor(getResources().getColor(R.color.colorCircleButton));
 
-        //初始化按钮背景图资源
         car = BitmapFactory.decodeResource(getResources(), R.drawable.car50);
         house = BitmapFactory.decodeResource(getResources(), R.drawable.house50);
         bao = BitmapFactory.decodeResource(getResources(), R.drawable.bao50);

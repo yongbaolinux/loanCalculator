@@ -28,7 +28,9 @@
             android:name=".HouseLoanActivity"
             android:label="@string/title_activity_house_loan"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".BaoActivity" />
+
     </application>
 
 </manifest>
