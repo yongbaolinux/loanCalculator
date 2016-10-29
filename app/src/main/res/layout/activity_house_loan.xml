@@ -1,28 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<net.diskroom.loancalculator.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+
+    android:gravity="bottom"
     tools:context="net.diskroom.loancalculator.HouseLoanActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <!--<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+    </android.support.v7.widget.Toolbar>-->
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-        <TextView
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="房屋总价"/>
+            android:paddingTop="@dimen/houseFormRowPaddingTop"
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom"
+            >
 
-    </android.support.design.widget.AppBarLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="房贷金额"
+                android:id="@+id/loanTotal"
+                android:layout_column="0"
+                android:textSize="@dimen/houseForm"/>
 
-</android.support.design.widget.CoordinatorLayout>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/loanTotalEditText"
+                android:layout_column="1"
+                android:layout_span="2"
+                android:background="@null"
+                android:gravity="right"
+                />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/houseFormRowPaddingTop"
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="房贷年限"
+                android:id="@+id/loanTime"
+                android:layout_column="0"
+                android:textSize="@dimen/houseForm"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请输入房贷年限"
+                android:id="@+id/loanTimeInput"
+                android:layout_column="0"
+                android:layout_span="2"
+                android:gravity="right"
+                android:textSize="@dimen/houseForm"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/houseFormRowPaddingTop"
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="房贷利率"
+                android:id="@+id/loanRate"
+                android:layout_column="0"
+                android:textSize="@dimen/houseForm"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="请输入房贷利率"
+                android:id="@+id/loanRateInput"
+                android:layout_column="0"
+                android:layout_span="2"
+                android:gravity="right"
+                android:textSize="@dimen/houseForm"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/houseFormRowPaddingTop"
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="还款方式"
+                android:id="@+id/loanType"
+                android:layout_column="0"
+                android:textSize="@dimen/houseForm"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="等额本金"
+                android:id="@+id/averageCapital"
+                android:layout_column="1"
+                android:layout_span="1"
+                android:checked="true" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="等额本息"
+                android:id="@+id/averagePlus"
+                android:layout_span="1"
+                android:layout_column="2"
+                android:checked="false" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/houseFormRowPaddingTop"
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
+
+            <Button android:text="计算"/>
+
+
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:id="@+id/wheelviewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:visibility="invisible">
+    </RelativeLayout>
+
+</net.diskroom.loancalculator.slidinguppanel.SlidingUpPanelLayout>

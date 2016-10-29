@@ -1,5 +1,6 @@
 package net.diskroom.loancalculator;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -40,8 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.show_menu) {
-
-
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "分享文本");
+            shareIntent.setType("text/plain");
+            startActivity(Intent.createChooser(shareIntent, "分享到"));
             return true;
         }
 
