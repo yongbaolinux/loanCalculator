@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorCircleButton">#8192d6</color>
     <color name="colorWhilte">#FFFFFF</color>
+    <color name="colorInput">#666666</color>
+    <color name="colorRadio">#666666</color>
 </resources>

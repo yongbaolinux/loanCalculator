@@ -43,7 +43,7 @@
                 android:layout_span="2"
                 android:layout_gravity="right"
                 android:orientation="horizontal"
-                android:weightSum="1">
+                android:gravity="center_vertical">
                 <EditText
                     android:id="@+id/loanTotalInput"
                     android:layout_width="wrap_content"
@@ -57,7 +57,9 @@
                     android:paddingTop="@dimen/houseFormRowPaddingTop"
                     android:paddingBottom="@dimen/houseFormRowPaddingBottom"
                     android:width="100dp"
-                    android:textColor="#333333" />
+                    android:textColor="@color/colorInput"
+                    android:layout_marginRight="10dp"
+                    android:digits="1234567890."/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,7 +88,7 @@
                 android:id="@+id/loanTimeInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="请输入房贷年限"
+                android:hint="请输入房贷年限"
                 android:layout_column="0"
                 android:layout_span="2"
                 android:gravity="right"
@@ -95,9 +97,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="@dimen/houseFormRowPaddingTop"
-            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -105,16 +105,37 @@
                 android:text="房贷利率"
                 android:id="@+id/loanRate"
                 android:layout_column="0"
-                android:textSize="@dimen/houseForm"/>
-            <TextView
-                android:id="@+id/loanRateInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="请输入房贷利率"
-                android:layout_column="0"
+                android:textSize="@dimen/houseForm"
+                android:layout_gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_column="1"
                 android:layout_span="2"
-                android:gravity="right"
-                android:textSize="@dimen/houseFormInput" />
+                android:layout_gravity="right"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/loanRateInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="请输入月利率"
+                    android:gravity="right"
+                    android:textColor="@color/colorInput"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
+                    android:layout_column="0"
+                    android:layout_span="2"
+                    android:background="@null"
+                    android:layout_marginRight="8dp"
+                    android:textSize="@dimen/houseFormInput"
+                    android:paddingTop="@dimen/houseFormRowPaddingTop"
+                    android:paddingBottom="@dimen/houseFormRowPaddingBottom"
+                    android:digits="1234567890."/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="%"
+                        android:gravity="center_vertical" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
@@ -130,32 +151,49 @@
                 android:id="@+id/loanType"
                 android:layout_column="0"
                 android:textSize="@dimen/houseForm"/>
+                <RadioGroup
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/averagePlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="等额本息"
+                        android:layout_column="1"
+                        android:textColor="@color/colorRadio"
+                        android:layout_marginLeft="20dp"
+                        android:drawablePadding="5dp"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_"
+                        android:textSize="@dimen/houseFormInput"
+                        />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="等额本息"
-                    android:id="@+id/averagePlus"
-                    android:layout_column="1"
-                    android:textColor="#333333" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="等额本金"
-                    android:id="@+id/averageCapital"
-                    android:layout_column="2"
-                    android:textColor="#333333" />
+                    <RadioButton
+                        android:id="@+id/averageCapital"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="等额本金"
+                        android:layout_column="2"
+                        android:checked="true"
+                        android:textColor="@color/colorRadio"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_"
+                        android:textSize="@dimen/houseFormInput"
+                        android:drawablePadding="5dp"
+                        />
+                </RadioGroup>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/houseFormRowPaddingTop"
             android:paddingBottom="@dimen/houseFormRowPaddingBottom">
-
-            <Button android:text="计算"/>
-
-
+            <Button android:text="计算"
+                android:id="@+id/calculator"
+                android:layout_column="0"
+                android:layout_span="2"
+                android:textSize="@dimen/houseForm"
+                android:textColor="@color/colorWhilte"
+                android:background="@color/colorPrimary"/>
         </TableRow>
     </TableLayout>
 

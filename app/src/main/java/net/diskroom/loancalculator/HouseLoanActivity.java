@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 ///实现从屏幕底部向上滑出一个view
 //import android.view.animation.Animation;
 ////
@@ -32,7 +35,8 @@ public class HouseLoanActivity extends AppCompatActivity {
 
     private EditText loanTotalInput;
     private TextView loanTimeInput;
-
+    private EditText loanRateInput;
+    private Button calculator;
     //private Animation myAnimation_Translate;
 
 
@@ -43,18 +47,32 @@ public class HouseLoanActivity extends AppCompatActivity {
 
         ///定义房贷金额输入框焦点事件
         final EditText loanTotalInput = (EditText)findViewById(R.id.loanTotalInput);
+        loanTotalInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loanTotalInput.setText("");
+            }
+        });
+        ///定义房贷利率输入框焦点事件
+        final EditText loanRateInput = (EditText)findViewById(R.id.loanRateInput);
+        loanRateInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loanRateInput.setText("");
+            }
+        });
 
         loanTotalInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
+                /*if (hasFocus) {
                     LogUtils.v("1");
                 } else {
                     LogUtils.v("2");
-                }
+                }*/
             }
         });
+
         //////点击呼出wheelview面板
         final TextView loanTimeInput = (TextView) findViewById(R.id.loanTimeInput);
         assert loanTimeInput != null;
@@ -105,6 +123,20 @@ public class HouseLoanActivity extends AppCompatActivity {
             }
         });
 
+        //////计算
+        calculator = (Button) findViewById(R.id.calculator);
+        calculator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String loanTotal = loanTotalInput.getText().toString();
+                if(loanTotal == null || loanTotal.length()==0 || loanTotal.equals("")){
+                    Toast.makeText(HouseLoanActivity.this,"请输入房贷金额",Toast.LENGTH_LONG).show();
+                }
+                String loanTime = loanTimeInput.getText().toString();
+                LogUtils.v(loanTime);
+            }
+        });
     }
 
 }
