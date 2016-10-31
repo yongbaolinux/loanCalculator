@@ -134,7 +134,18 @@ public class HouseLoanActivity extends AppCompatActivity {
                     Toast.makeText(HouseLoanActivity.this,"请输入房贷金额",Toast.LENGTH_LONG).show();
                 }
                 String loanTime = loanTimeInput.getText().toString();
-                LogUtils.v(loanTime);
+                //从loanTime中提取出整数
+                String loanTimeStr = "";
+                int loanTimeInt = 0;
+                if(loanTime != null && !loanTime.equals("") && loanTime.length()!=0){
+                    for(int i = 0;i<loanTime.length();i++){
+                        if(loanTime.charAt(i)>=48 && loanTime.charAt(i)<=57) {
+                            loanTimeStr += loanTime.charAt(i);
+                        }
+                    }
+                    loanTimeInt = Integer.parseInt(loanTimeStr);
+                }
+                
             }
         });
     }
