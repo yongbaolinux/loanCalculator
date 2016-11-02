@@ -88,7 +88,7 @@
                 android:id="@+id/loanTimeInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="请输入房贷年限"
+                android:hint="请选择房贷年限"
                 android:layout_column="0"
                 android:layout_span="2"
                 android:gravity="right"
@@ -152,6 +152,7 @@
                 android:layout_column="0"
                 android:textSize="@dimen/houseForm"/>
                 <RadioGroup
+                    android:id="@+id/loanTypeRadio"
                     android:orientation="horizontal">
                     <RadioButton
                         android:id="@+id/averagePlus"
@@ -159,9 +160,10 @@
                         android:layout_height="wrap_content"
                         android:text="等额本息"
                         android:layout_column="1"
-                        android:textColor="@color/colorRadio"
-                        android:layout_marginLeft="20dp"
-                        android:drawablePadding="5dp"
+                        android:textColor="@color/colorInput"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="5dp"
+                        android:drawablePadding="2dp"
                         android:button="@null"
                         android:drawableLeft="@drawable/radio_"
                         android:textSize="@dimen/houseFormInput"
@@ -178,7 +180,7 @@
                         android:button="@null"
                         android:drawableLeft="@drawable/radio_"
                         android:textSize="@dimen/houseFormInput"
-                        android:drawablePadding="5dp"
+                        android:drawablePadding="2dp"
                         />
                 </RadioGroup>
         </TableRow>
