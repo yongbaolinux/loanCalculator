@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,11 +15,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +32,9 @@ import android.widget.Toast;
 
 ////wheelview控件
 import com.apkfuns.logutils.LogUtils;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import net.diskroom.loancalculator.wheelview.LoopView;
 import net.diskroom.loancalculator.wheelview.OnItemSelectedListener;
@@ -41,6 +48,11 @@ public class HouseLoanActivity extends AppCompatActivity {
     private EditText loanRateInput;
     private RadioGroup loanTypeRadio;
     private Button calculator;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
     //private Animation myAnimation_Translate;
 
 
@@ -50,7 +62,7 @@ public class HouseLoanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_house_loan);
 
         ///定义房贷金额输入框焦点事件
-        loanTotalInput = (EditText)findViewById(R.id.loanTotalInput);
+        loanTotalInput = (EditText) findViewById(R.id.loanTotalInput);
         loanTotalInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +80,7 @@ public class HouseLoanActivity extends AppCompatActivity {
             }
         });*/
         ///定义房贷利率输入框焦点事件
-        loanRateInput = (EditText)findViewById(R.id.loanRateInput);
+        loanRateInput = (EditText) findViewById(R.id.loanRateInput);
         loanRateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +88,7 @@ public class HouseLoanActivity extends AppCompatActivity {
             }
         });
 
-        loanTypeRadio = (RadioGroup)findViewById(R.id.loanTypeRadio);
+        loanTypeRadio = (RadioGroup) findViewById(R.id.loanTypeRadio);
 
         //////点击呼出wheelview面板
         final TextView loanTimeInput = (TextView) findViewById(R.id.loanTimeInput);
@@ -138,67 +150,104 @@ public class HouseLoanActivity extends AppCompatActivity {
 
         //////计算
         calculator = (Button) findViewById(R.id.calculator);
+
         calculator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //验证房贷金额
                 String loanTotal = loanTotalInput.getText().toString();
-                if(loanTotal == null || loanTotal.length()==0 || loanTotal.equals("")){
-                    Toast.makeText(HouseLoanActivity.this,"请输入房贷金额",Toast.LENGTH_LONG).show();
+                if (loanTotal == null || loanTotal.length() == 0 || loanTotal.equals("")) {
+                    Toast.makeText(HouseLoanActivity.this, "请输入房贷金额", Toast.LENGTH_LONG).show();
                     return;
                 }
                 //验证房贷年限
                 String loanTime = loanTimeInput.getText().toString();
                 String loanTimeStr = "";//从loanTime中提取出整数
                 int loanTimeInt = 0;
-                if(loanTime != null && !loanTime.equals("") && loanTime.length()!=0){
-                    for(int i = 0;i<loanTime.length();i++){
-                        if(loanTime.charAt(i)>=48 && loanTime.charAt(i)<=57) {
+                if (loanTime != null && !loanTime.equals("") && loanTime.length() != 0) {
+                    for (int i = 0; i < loanTime.length(); i++) {
+                        if (loanTime.charAt(i) >= 48 && loanTime.charAt(i) <= 57) {
                             loanTimeStr += loanTime.charAt(i);
                         }
                     }
                     loanTimeInt = Integer.parseInt(loanTimeStr);
                 }
-                if(loanTimeInt == 0){
-                    Toast.makeText(HouseLoanActivity.this,"请选择房贷年限",Toast.LENGTH_LONG).show();
+                if (loanTimeInt == 0) {
+                    Toast.makeText(HouseLoanActivity.this, "请选择房贷年限", Toast.LENGTH_LONG).show();
                     return;
                 }
                 //验证房贷利率
                 String loanRate = loanRateInput.getText().toString();
-                if(loanTotal == null || loanTotal.length()==0 || loanTotal.equals("")){
-                    Toast.makeText(HouseLoanActivity.this,"请输入房贷月利率",Toast.LENGTH_LONG).show();
+                if (loanTotal == null || loanTotal.length() == 0 || loanTotal.equals("")) {
+                    Toast.makeText(HouseLoanActivity.this, "请输入房贷月利率", Toast.LENGTH_LONG).show();
                     return;
                 }
                 //获取还款方式
-                RadioButton currentRadioButton = (RadioButton)findViewById(loanTypeRadio.getCheckedRadioButtonId());
+                RadioButton currentRadioButton = (RadioButton) findViewById(loanTypeRadio.getCheckedRadioButtonId());
                 String loanType = currentRadioButton.getText().toString();
-                if(loanType.equals("等额本金")){
+                if (loanType.equals("等额本金")) {
                     //等额本金还款方式(计算公式 每月还款金额 = （贷款本金 / 还款月数）+（本金 — 已归还本金累计额）×每月利率)
 
-                    double[][] months = new double[loanTimeInt*12][4];
+                    double[][] months = new double[loanTimeInt * 12][4];
                     int loanTotalInt = Integer.parseInt(loanTotal) * 10000; //贷款本金
-                    int perMonthLoan = loanTotalInt / (loanTimeInt*12);     //每月应还本金;
+                    int perMonthLoan = loanTotalInt / (loanTimeInt * 12);     //每月应还本金;
 
-                    for(int i=0;i<loanTimeInt*12;i++){
-                        LogUtils.v(Float.parseFloat(loanRate));
-                        months[i][0] = i+1;
-                        months[i][1] = perMonthLoan + (loanTotalInt - i*perMonthLoan)*Float.parseFloat(loanRate)*0.01/12;
-                        months[i][2] = (loanTotalInt - i*perMonthLoan)*Float.parseFloat(loanRate)*0.01/12;
+                    for (int i = 0; i < loanTimeInt * 12; i++) {
+                        //LogUtils.v(Float.parseFloat(loanRate));
+                        months[i][0] = i + 1;
+                        months[i][1] = perMonthLoan + (loanTotalInt - i * perMonthLoan) * Float.parseFloat(loanRate) * 0.01 / 12;
+                        months[i][2] = (loanTotalInt - i * perMonthLoan) * Float.parseFloat(loanRate) * 0.01 / 12;
                         months[i][3] = perMonthLoan;
                     }
                     //LogUtils.v(months);
                     //展示计算结果
-                    AlertDialog calculatorDataDialog = new AlertDialog.Builder(HouseLoanActivity.this).setCancelable(true).create();
+                    final AlertDialog calculatorDataDialog = new AlertDialog.Builder(HouseLoanActivity.this).setCancelable(true).create();
                     Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
                     calculatorDataDialog.show();
                     calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
-                    TableRow tableRow = new TableRow(HouseLoanActivity.this);
-                    for(int i=0;i<months.length;i++){
-                        
-                    }
+                    TextView loanTypeTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.loanType);
+                    loanTypeTextView.setText(loanType);
+                    //关闭数据对话框
+                    TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
+                    close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            LogUtils.v("click");
+                            calculatorDataDialog.dismiss();
+                        }
+
+                    });
+
+                    //显示还贷数据
+                    //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
+                    //calculateDataTable.setStretchAllColumns(true);
+                    //LinearLayout.LayoutParams lp = new TextView.Layout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT,1.0f);
+                    //lp.weight = 1.0f;
+                    /*for(int i=0;i<months.length;i++){
+                        TableRow tableRow = new TableRow(HouseLoanActivity.this);
+                        for(int j=0;j<months[i].length;j++){
+                            TextView textView = new TextView(HouseLoanActivity.this);
+                            //textView.setLayoutParams(lp); //无效
+                            textView.setGravity(Gravity.CENTER);
+                            if(j==0) {
+                                textView.setText(String.valueOf((int)(months[i][j])));
+                            } else {
+                                textView.setText(String.format("%.1f",months[i][j]));
+                            }
+                            tableRow.addView(textView);
+                        }
+
+                        calculateDataTable.addView(tableRow);
+
+                    }*/
+                    String[] tableRowStr = {"1","2722.5","1347.5","1375.0"};
+                    ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(HouseLoanActivity.this,R.id.calculateDataListViewRow,tableRowStr);
+
                 }
             }
         });
+
     }
 
 }

@@ -18,7 +18,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="18sp"
-            android:textColor="@color/colorWhilte"
+            android:textColor="@color/colorWhite"
             android:text="取消"/>
         <TextView
             android:id="@+id/switch_city_dialog_sure"
@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="18sp"
-            android:textColor="@color/colorWhilte"
+            android:textColor="@color/colorWhite"
             android:text="确定"/>
     </LinearLayout>
 </LinearLayout>

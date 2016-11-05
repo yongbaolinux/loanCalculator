@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    android:orientation="vertical"
-    android:id="@+id/wheelviewContainer">
+    android:id="@+id/wheelviewContainer"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+
         android:background="@color/colorPrimary"
         android:layout_weight="1">
         <TextView
@@ -19,8 +18,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="18sp"
-            android:textColor="@color/colorWhilte"
-            android:text="取消"/>
+            android:textColor="@color/colorWhite" />
         <TextView
             android:id="@+id/close"
             android:layout_width="match_parent"
@@ -28,8 +26,10 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="18sp"
-            android:textColor="@color/colorWhilte"
-            android:text="确定"/>
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textColor="@color/colorWhite"
+            android:text="关闭"/>
     </LinearLayout>
     <TableLayout
         android:layout_width="match_parent"
@@ -59,8 +59,7 @@
                 android:text="总支付利息"
                 android:layout_gravity="center"
                 android:layout_span="1"
-                android:layout_column="0"
-                android:layout_weight="1" />
+                android:layout_column="0" />
             <TextView
 
                 android:text=""
@@ -70,44 +69,52 @@
                 android:layout_weight="1" />
 
         </TableRow>
-
     </TableLayout>
-    <TableLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-        <TableRow>
-            <TextView
+        android:layout_height="match_parent">
+        <TableLayout
+            android:id="@+id/calculateDataTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+            <TableRow android:layout_width="match_parent">
+                <TextView
 
-                android:text="期数"
-                android:layout_gravity="center"
-                android:layout_span="1"
-                android:layout_column="0"
-                android:layout_weight="1" />
-            <TextView
-                android:text="每月还款"
-                android:layout_gravity="center"
-                android:layout_span="1"
-                android:layout_column="1"
-                android:layout_weight="1" />
-            <TextView
+                    android:text="期数"
+                    android:layout_gravity="center"
+                    android:layout_span="1"
+                    android:layout_column="0"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1" />
+                <TextView
+                    android:text="每月还款"
+                    android:layout_gravity="center"
+                    android:layout_column="1"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1" />
+                <TextView
 
-                android:text="支付利息"
-                android:layout_span="1"
-                android:layout_column="3"
-                android:layout_weight="1"
-                android:layout_gravity="center" />
-            <TextView
-                android:text="支付本金"
-                android:layout_span="1"
-                android:layout_column="2"
-                android:layout_weight="1"
-                android:layout_gravity="center" />
+                    android:text="支付利息"
+                    android:layout_column="2"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1" />
+                <TextView
+                    android:text="支付本金"
+                    android:layout_column="3"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1" />
+            </TableRow>
+            <ListView
+                android:id="@+id/calculateDataListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </TableRow>
-
-
-    </TableLayout>
-
+            </ListView>
+        </TableLayout>
+    </ScrollView>
 </LinearLayout>
