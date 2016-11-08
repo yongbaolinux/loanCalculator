@@ -1,16 +1,13 @@
 package net.diskroom.loancalculator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +15,13 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 ///实现从屏幕底部向上滑出一个view
@@ -32,10 +30,6 @@ import android.widget.Toast;
 
 ////wheelview控件
 import com.apkfuns.logutils.LogUtils;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import net.diskroom.loancalculator.wheelview.LoopView;
 import net.diskroom.loancalculator.wheelview.OnItemSelectedListener;
 
@@ -48,13 +42,6 @@ public class HouseLoanActivity extends AppCompatActivity {
     private EditText loanRateInput;
     private RadioGroup loanTypeRadio;
     private Button calculator;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-    //private Animation myAnimation_Translate;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +187,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                         months[i][3] = perMonthLoan;
                     }
                     //LogUtils.v(months);
+
                     //展示计算结果
                     final AlertDialog calculatorDataDialog = new AlertDialog.Builder(HouseLoanActivity.this).setCancelable(true).create();
                     Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
@@ -218,7 +206,7 @@ public class HouseLoanActivity extends AppCompatActivity {
 
                     });
 
-                    //显示还贷数据
+                    //显示还贷数据 addview 的方式显示 效率极低
                     //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
                     //calculateDataTable.setStretchAllColumns(true);
                     //LinearLayout.LayoutParams lp = new TextView.Layout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT,1.0f);
@@ -240,11 +228,32 @@ public class HouseLoanActivity extends AppCompatActivity {
                         calculateDataTable.addView(tableRow);
 
                     }*/
-                    String[] tableRowStr = {"1","2722.5","1347.5","1375.0"};
+
+                    String[][] tableRowStr = new String[][]{{"1","2722.5","1347.5","1375.0"},{"2","2722.5","1347.5","1375.0"}};
                     ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
-                    ArrayAdapter arrayAdapter = new ArrayAdapter(HouseLoanActivity.this,R.id.calculateDataListViewRow,tableRowStr);
+                    ArrayAdapter<String[]> arrayAdapter = new TableAda<String[]>(HouseLoanActivity.this,R.layout.calculate_data_list_view_row,tableRowStr);
+
+                    lv.setAdapter(arrayAdapter);
+                    fixListViewHeight(lv);
 
                 }
+            }
+
+            //动态计算ListView的高度 修正ListView在ScrollView里只显示一行的问题
+            private void fixListViewHeight(ListView lv){
+                ListAdapter listAdapter = lv.getAdapter();
+                if(listAdapter == null){
+                    return;
+                }
+                int height = 0;
+                for(int i=0;i<listAdapter.getCount();i++){
+                    View listViewItem = listAdapter.getView(i,null,lv);
+                    listViewItem.measure(0,0);
+                    height += listViewItem.getMeasuredHeight();
+                }
+                ViewGroup.LayoutParams params = lv.getLayoutParams();
+                params.height = height + lv.getDividerHeight() * (listAdapter.getCount()-1);        //间隔线高度+listViewItem高度和
+                lv.setLayoutParams(params);
             }
         });
 

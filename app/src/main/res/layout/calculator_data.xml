@@ -71,9 +71,7 @@
         </TableRow>
     </TableLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
         <TableLayout
             android:id="@+id/calculateDataTable"
             android:layout_width="match_parent"
@@ -109,12 +107,16 @@
                     android:layout_width="match_parent"
                     android:layout_weight="1" />
             </TableRow>
-            <ListView
-                android:id="@+id/calculateDataListView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </ListView>
         </TableLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/calculateDataListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+        </ListView>
+
     </ScrollView>
 </LinearLayout>
