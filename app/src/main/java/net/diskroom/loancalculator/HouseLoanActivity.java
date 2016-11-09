@@ -1,9 +1,7 @@
 package net.diskroom.loancalculator;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -12,16 +10,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 ///实现从屏幕底部向上滑出一个view
@@ -81,7 +76,7 @@ public class HouseLoanActivity extends AppCompatActivity {
         final TextView loanTimeInput = (TextView) findViewById(R.id.loanTimeInput);
         assert loanTimeInput != null;
         loanTimeInput.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+
             @Override
             public void onClick(View v) {
                 final AlertDialog wheelviewDialog = new AlertDialog.Builder(HouseLoanActivity.this).setCancelable(false).create();
@@ -229,11 +224,10 @@ public class HouseLoanActivity extends AppCompatActivity {
 
                     }*/
 
-                    String[][] tableRowStr = new String[][]{{"1","2722.5","1347.5","1375.0"},{"2","2722.5","1347.5","1375.0"}};
                     ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
-                    ArrayAdapter<String[]> arrayAdapter = new TableAda<String[]>(HouseLoanActivity.this,R.layout.calculate_data_list_view_row,tableRowStr);
+                    TableAdapter tableAdapter = new TableAdapter(this,months);
 
-                    lv.setAdapter(arrayAdapter);
+                    lv.setAdapter(tableAdapter);
                     fixListViewHeight(lv);
 
                 }
