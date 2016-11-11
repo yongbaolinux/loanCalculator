@@ -6,17 +6,29 @@ import android.app.AlertDialog;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.BoringLayout;
+import android.text.Layout;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
+import android.widget.Scroller;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 ///实现从屏幕底部向上滑出一个view
@@ -204,8 +216,6 @@ public class HouseLoanActivity extends AppCompatActivity {
                     //显示还贷数据 addview 的方式显示 效率极低
                     //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
                     //calculateDataTable.setStretchAllColumns(true);
-                    //LinearLayout.LayoutParams lp = new TextView.Layout(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT,1.0f);
-                    //lp.weight = 1.0f;
                     /*for(int i=0;i<months.length;i++){
                         TableRow tableRow = new TableRow(HouseLoanActivity.this);
                         for(int j=0;j<months[i].length;j++){
@@ -225,28 +235,45 @@ public class HouseLoanActivity extends AppCompatActivity {
                     }*/
 
                     ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
-                    TableAdapter tableAdapter = new TableAdapter(this,months);
-
+                    TableAdapter tableAdapter = new TableAdapter(HouseLoanActivity.this,months);
                     lv.setAdapter(tableAdapter);
                     fixListViewHeight(lv);
+                    lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
+                            //LogUtils.v(scrollState);
+                        }
 
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                            //LogUtils.v("a");
+                        }
+                    });
+
+                    /*ScrollView sv = (ScrollView) calculatorDataDialogWindow.findViewById(R.id.calculateDataScroll);
+                    sv.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                        @Override
+                        public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                            LogUtils.v("ScrollView");
+                        }
+                    });*/
                 }
             }
 
             //动态计算ListView的高度 修正ListView在ScrollView里只显示一行的问题
             private void fixListViewHeight(ListView lv){
-                ListAdapter listAdapter = lv.getAdapter();
-                if(listAdapter == null){
+                TableAdapter tableAdapter = (TableAdapter)lv.getAdapter();
+                if(tableAdapter == null){
                     return;
                 }
                 int height = 0;
-                for(int i=0;i<listAdapter.getCount();i++){
-                    View listViewItem = listAdapter.getView(i,null,lv);
-                    listViewItem.measure(0,0);
-                    height += listViewItem.getMeasuredHeight();
+                for(int i=0;i<tableAdapter.getCount();i++){
+                    View tableViewItem = tableAdapter.getView(i,null,lv);
+                    tableViewItem.measure(0,0);
+                    height += tableViewItem.getMeasuredHeight();
                 }
                 ViewGroup.LayoutParams params = lv.getLayoutParams();
-                params.height = height + lv.getDividerHeight() * (listAdapter.getCount()-1);        //间隔线高度+listViewItem高度和
+                params.height = height + lv.getDividerHeight() * (tableAdapter.getCount()-1);        //间隔线高度+listViewItem高度和
                 lv.setLayoutParams(params);
             }
         });

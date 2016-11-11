@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.apkfuns.logutils.LogUtils;
+
+
 
 /**
  * Created by yongbaolinux on 2016/11/8.
@@ -19,7 +22,8 @@ public class TableAdapter extends BaseAdapter {
         this.data = months;
         inflater = LayoutInflater.from(context);
     }
-    
+
+
 
     public int getCount(){
         return data.length;
@@ -34,18 +38,37 @@ public class TableAdapter extends BaseAdapter {
     }
 
     public View getView(int position,View view,ViewGroup parent){
-        view = inflater.inflate(R.layout.calculate_data_list_view_row,null);
-        TextView rowTerm = (TextView)view.findViewById(R.id.rowTerm);
-        rowTerm.setText(String.valueOf(getItem(position)[0]));
+        ViewHolder holder;
+        if(view == null) {
+            view = inflater.inflate(R.layout.calculate_data_list_view_row, null);
+            TextView rowTerm = (TextView)view.findViewById(R.id.rowTerm);
+            TextView rowPerMonthTotal = (TextView)view.findViewById(R.id.rowPerMonthTotal);
+            TextView rowPerMonthInterest = (TextView)view.findViewById(R.id.rowPerMonthInterest);
+            TextView rowPerMonthPrincipal = (TextView)view.findViewById(R.id.rowPerMonthPrincipal);
+            holder = new ViewHolder();
+            holder.rowTerm = rowTerm;
+            holder.rowPerMonthTotal = rowPerMonthTotal;
+            holder.rowPerMonthInterest = rowPerMonthInterest;
+            holder.rowPerMonthPrincipal = rowPerMonthPrincipal;
+            view.setTag(holder);
+        } else {
+            holder = (ViewHolder) view.getTag();
+        }
+
+        holder.rowTerm.setText(String.valueOf((int)getItem(position)[0]));
         //每月应还款项
-        TextView rowPerMonthTotal = (TextView)view.findViewById(R.id.rowPerMonthTotal);
-        rowPerMonthTotal.setText(String.valueOf(getItem(position)[1]));
+        holder.rowPerMonthTotal.setText(String.format("%.1f",getItem(position)[1]));
         //每月应还利息
-        TextView rowPerMonthInterest = (TextView)view.findViewById(R.id.rowPerMonthInterest);
-        rowPerMonthInterest.setText(String.valueOf(getItem(position)[2]));
+        holder.rowPerMonthInterest.setText(String.format("%.1f",getItem(position)[2]));
         //每月应还本金
-        TextView rowPerMonthPrincipal = (TextView)view.findViewById(R.id.rowPerMonthPrincipal);
-        rowPerMonthPrincipal.setText(String.valueOf(getItem(position)[3]));
+        holder.rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
         return view;
+    }
+
+    private final class ViewHolder{
+        public TextView rowTerm;
+        public TextView rowPerMonthTotal;
+        public TextView rowPerMonthInterest;
+        public TextView rowPerMonthPrincipal;
     }
 }
