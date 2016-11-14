@@ -3,6 +3,7 @@ package net.diskroom.loancalculator;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +12,13 @@ import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -214,8 +217,8 @@ public class HouseLoanActivity extends AppCompatActivity {
                     });
 
                     //显示还贷数据 addview 的方式显示 效率极低
-                    //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
-                    //calculateDataTable.setStretchAllColumns(true);
+                    TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
+                    calculateDataTable.setStretchAllColumns(true);
                     /*for(int i=0;i<months.length;i++){
                         TableRow tableRow = new TableRow(HouseLoanActivity.this);
                         for(int j=0;j<months[i].length;j++){
@@ -237,7 +240,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                     ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
                     TableAdapter tableAdapter = new TableAdapter(HouseLoanActivity.this,months);
                     lv.setAdapter(tableAdapter);
-                    fixListViewHeight(lv);
+                    /*fixListViewHeight(lv);
                     lv.setOnScrollListener(new AbsListView.OnScrollListener() {
                         @Override
                         public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -248,7 +251,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                             //LogUtils.v("a");
                         }
-                    });
+                    });*/
 
                     /*ScrollView sv = (ScrollView) calculatorDataDialogWindow.findViewById(R.id.calculateDataScroll);
                     sv.setOnScrollChangeListener(new View.OnScrollChangeListener() {
