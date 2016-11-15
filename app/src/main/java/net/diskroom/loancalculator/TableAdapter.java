@@ -64,12 +64,17 @@ public class TableAdapter extends BaseAdapter {
         //每月应还本金
         holder.rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
         return view;*/
-        LinearLayout tr = new LinearLayout(mContext);
+            LogUtils.v(view);
+            LinearLayout tr = new LinearLayout(mContext);
+            TextView rowTerm = new TextView(mContext);
+            TextView rowPerMonthTotal = new TextView(mContext);
+            TextView rowPerMonthInterest = new TextView(mContext);
+            TextView rowPerMonthPrincipal = new TextView(mContext);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.rowTerm = rowTerm;
+            viewHolder.rowPerMonthTotal = rowPerMonthTotal;
+            viewHolder.rowPerMonthInterest = rowPerMonthInterest;
 
-        TextView rowTerm = new TextView(mContext);
-        TextView rowPerMonthTotal = new TextView(mContext);
-        TextView rowPerMonthInterest = new TextView(mContext);
-        TextView rowPerMonthPrincipal = new TextView(mContext);
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lp.weight = 1.0f;
