@@ -64,7 +64,8 @@ public class TableAdapter extends BaseAdapter {
         //每月应还本金
         holder.rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
         return view;*/
-        TableRow tr = new TableRow(mContext);
+        LinearLayout tr = new LinearLayout(mContext);
+
         TextView rowTerm = new TextView(mContext);
         TextView rowPerMonthTotal = new TextView(mContext);
         TextView rowPerMonthInterest = new TextView(mContext);
@@ -72,27 +73,27 @@ public class TableAdapter extends BaseAdapter {
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lp.weight = 1.0f;
+
         rowTerm.setGravity(Gravity.CENTER);
-        rowTerm.setWidth(10);
+        rowTerm.setLayoutParams(lp);
         rowTerm.setText(String.valueOf((int) getItem(position)[0]));
 
         rowPerMonthTotal.setGravity(Gravity.CENTER);
-        rowPerMonthTotal.setWidth(20);
+        rowPerMonthTotal.setLayoutParams(lp);
         rowPerMonthTotal.setText(String.format("%.1f", getItem(position)[1]));
 
         rowPerMonthInterest.setGravity(Gravity.CENTER);
-        rowPerMonthInterest.setWidth(200);
+        rowPerMonthInterest.setLayoutParams(lp);
         rowPerMonthInterest.setText(String.format("%.1f", getItem(position)[2]));
 
         rowPerMonthPrincipal.setGravity(Gravity.CENTER);
-        //rowPerMonthPrincipal.setLayoutParams(lp);
+        rowPerMonthPrincipal.setLayoutParams(lp);
         rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
 
         tr.addView(rowTerm);
         tr.addView(rowPerMonthTotal);
         tr.addView(rowPerMonthInterest);
         tr.addView(rowPerMonthPrincipal);
-
         return tr;
     }
 
