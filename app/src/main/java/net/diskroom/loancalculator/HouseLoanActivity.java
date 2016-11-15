@@ -219,6 +219,9 @@ public class HouseLoanActivity extends AppCompatActivity {
                     //显示还贷数据 addview 的方式显示 效率极低
                     TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
                     calculateDataTable.setStretchAllColumns(true);
+                    ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
+                    TableAdapter tableAdapter = new TableAdapter(HouseLoanActivity.this,months);
+                    lv.setAdapter(tableAdapter);
                     /*for(int i=0;i<months.length;i++){
                         TableRow tableRow = new TableRow(HouseLoanActivity.this);
                         for(int j=0;j<months[i].length;j++){
@@ -237,9 +240,6 @@ public class HouseLoanActivity extends AppCompatActivity {
 
                     }*/
 
-                    ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
-                    TableAdapter tableAdapter = new TableAdapter(HouseLoanActivity.this,months);
-                    lv.setAdapter(tableAdapter);
                     /*fixListViewHeight(lv);
                     lv.setOnScrollListener(new AbsListView.OnScrollListener() {
                         @Override
