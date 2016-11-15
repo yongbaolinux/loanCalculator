@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -68,13 +69,23 @@ public class TableAdapter extends BaseAdapter {
         TextView rowPerMonthTotal = new TextView(mContext);
         TextView rowPerMonthInterest = new TextView(mContext);
         TextView rowPerMonthPrincipal = new TextView(mContext);
-        //rowTerm.setGravity(Gravity.CENTER);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.weight = 1.0f;
+        rowTerm.setGravity(Gravity.CENTER);
+        rowTerm.setWidth(10);
         rowTerm.setText(String.valueOf((int) getItem(position)[0]));
-        //rowPerMonthTotal.setGravity(Gravity.CENTER);
+
+        rowPerMonthTotal.setGravity(Gravity.CENTER);
+        rowPerMonthTotal.setWidth(20);
         rowPerMonthTotal.setText(String.format("%.1f", getItem(position)[1]));
-        //rowPerMonthInterest.setGravity(Gravity.CENTER);
+
+        rowPerMonthInterest.setGravity(Gravity.CENTER);
+        rowPerMonthInterest.setWidth(200);
         rowPerMonthInterest.setText(String.format("%.1f", getItem(position)[2]));
-        //rowPerMonthPrincipal.setGravity(Gravity.CENTER);
+
+        rowPerMonthPrincipal.setGravity(Gravity.CENTER);
+        //rowPerMonthPrincipal.setLayoutParams(lp);
         rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
 
         tr.addView(rowTerm);
