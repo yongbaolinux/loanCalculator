@@ -71,11 +71,6 @@ public class TableAdapter extends BaseAdapter {
         TextView rowPerMonthTotal = new TextView(mContext);
         TextView rowPerMonthInterest = new TextView(mContext);
         TextView rowPerMonthPrincipal = new TextView(mContext);
-        ViewHolder viewHolder = new ViewHolder();
-        viewHolder.rowTerm = rowTerm;
-        viewHolder.rowPerMonthTotal = rowPerMonthTotal;
-        viewHolder.rowPerMonthInterest = rowPerMonthInterest;
-
 
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lp.weight = 1.0f;
