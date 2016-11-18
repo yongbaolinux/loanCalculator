@@ -65,7 +65,7 @@ public class TableAdapter extends BaseAdapter {
         //每月应还本金
         holder.rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
         return view;*/
-
+        //LogUtils.v(position);
         LinearLayout tr = new LinearLayout(mContext);
         TextView rowTerm = new TextView(mContext);
         TextView rowPerMonthTotal = new TextView(mContext);

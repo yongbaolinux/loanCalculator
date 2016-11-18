@@ -210,15 +210,19 @@ public class HouseLoanActivity extends AppCompatActivity {
                     close.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            LogUtils.v("click");
                             calculatorDataDialog.dismiss();
                         }
 
                     });
 
                     //显示还贷数据 addview 的方式显示 效率极低
-                    TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
-                    calculateDataTable.setStretchAllColumns(true);
+                    //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
+                    //calculateDataTable.setStretchAllColumns(true);
+
+                    /*DisplayMetrics metrics = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                    LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle);
+                    LogUtils.v(loanTitle.getHeight());*/
                     ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
                     TableAdapter tableAdapter = new TableAdapter(HouseLoanActivity.this,months);
                     lv.setAdapter(tableAdapter);
