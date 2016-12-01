@@ -66,36 +66,36 @@ public class TableAdapter extends BaseAdapter {
         holder.rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
         return view;*/
         //LogUtils.v(position);
-        LinearLayout tr = new LinearLayout(mContext);
+        LinearLayout item = new LinearLayout(mContext);
         TextView rowTerm = new TextView(mContext);
         TextView rowPerMonthTotal = new TextView(mContext);
         TextView rowPerMonthInterest = new TextView(mContext);
         TextView rowPerMonthPrincipal = new TextView(mContext);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        lp.weight = 1.0f;
+        /*LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        lp.weight = 1.0f;*/
 
         rowTerm.setGravity(Gravity.CENTER);
-        rowTerm.setLayoutParams(lp);
+        //rowTerm.setLayoutParams(lp);
         rowTerm.setText(String.valueOf((int) getItem(position)[0]));
 
         rowPerMonthTotal.setGravity(Gravity.CENTER);
-        rowPerMonthTotal.setLayoutParams(lp);
+        //rowPerMonthTotal.setLayoutParams(lp);
         rowPerMonthTotal.setText(String.format("%.1f", getItem(position)[1]));
 
         rowPerMonthInterest.setGravity(Gravity.CENTER);
-        rowPerMonthInterest.setLayoutParams(lp);
+        //rowPerMonthInterest.setLayoutParams(lp);
         rowPerMonthInterest.setText(String.format("%.1f", getItem(position)[2]));
 
         rowPerMonthPrincipal.setGravity(Gravity.CENTER);
-        rowPerMonthPrincipal.setLayoutParams(lp);
+        //rowPerMonthPrincipal.setLayoutParams(lp);
         rowPerMonthPrincipal.setText(String.format("%.1f",getItem(position)[3]));
 
-        tr.addView(rowTerm);
-        tr.addView(rowPerMonthTotal);
-        tr.addView(rowPerMonthInterest);
-        tr.addView(rowPerMonthPrincipal);
-        return tr;
+        item.addView(rowTerm);
+        item.addView(rowPerMonthTotal);
+        item.addView(rowPerMonthInterest);
+        item.addView(rowPerMonthPrincipal);
+        return item;
     }
 
     private final class ViewHolder{

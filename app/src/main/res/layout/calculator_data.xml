@@ -5,6 +5,15 @@
     android:background="#ffffff"
     android:id="@+id/wheelviewContainer"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/loanTips"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorWhite"
+        android:text="( * 数据仅供参考 )"/>
     <LinearLayout
         android:id="@+id/loanTitle"
         android:layout_width="match_parent"
@@ -25,13 +34,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="18sp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="15dp"
             android:textColor="@color/colorWhite"
             android:text="关闭"/>
     </LinearLayout>
 
     <TableLayout
+        android:id="@+id/loanSubTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TableRow android:layout_width="match_parent">
@@ -63,45 +73,44 @@
     <ListView
         android:id="@+id/calculateDataListView"
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_height="400dp">
     </ListView>
 
     <TableLayout
+        android:id="@+id/loanFooter"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-        <TableRow>
+        android:paddingRight="20dp"
+        android:background="@color/colorPrimary">
+        <TableRow
+            android:textSize="16sp"
+            android:paddingTop="10dp">
             <TextView
-
                 android:text="总还款金额"
-                android:layout_gravity="center"
                 android:layout_span="1"
                 android:layout_column="0"
-                android:layout_weight="1" />
+                android:textColor="@color/colorWhite"/>
             <TextView
-
-                android:text=""
-                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:layout_span="1"
                 android:layout_column="1"
-                android:layout_weight="1" />
-
+                android:textColor="@color/colorWhite"/>
         </TableRow>
-        <TableRow>
+        <TableRow
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp">
             <TextView
-
                 android:text="总支付利息"
-                android:layout_gravity="center"
                 android:layout_span="1"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:textColor="@color/colorWhite"/>
             <TextView
-                android:text=""
-                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:layout_span="1"
                 android:layout_column="1"
-                android:layout_weight="1" />
-
+                android:textColor="@color/colorWhite"/>
         </TableRow>
     </TableLayout>
 </LinearLayout>

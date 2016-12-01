@@ -199,7 +199,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                     //LogUtils.v(months);
 
                     //展示计算结果
-                    final AlertDialog calculatorDataDialog = new AlertDialog.Builder(HouseLoanActivity.this).setCancelable(true).create();
+                    final AlertDialog calculatorDataDialog = new AlertDialog.Builder(HouseLoanActivity.this,R.style.Dialog_FS).setCancelable(true).create();
                     Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
                     calculatorDataDialog.show();
                     calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
@@ -219,11 +219,26 @@ public class HouseLoanActivity extends AppCompatActivity {
                     //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
                     //calculateDataTable.setStretchAllColumns(true);
 
-                    /*DisplayMetrics metrics = new DisplayMetrics();
+                    DisplayMetrics metrics = new DisplayMetrics();
                     getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                    LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle);
-                    LogUtils.v(loanTitle.getHeight());*/
-                    ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);
+                    TextView loanTips = (TextView)calculatorDataDialogWindow.findViewById(R.id.loanTips); //小提示
+                    LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle); //标题
+                    TableLayout loanSubTitle = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.loanSubTitle); //副标题
+                    ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);       //listview
+                    LinearLayout loanFooter = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanFooter);   //底部
+
+                    int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                    int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                    loanTitle.measure(w, h);
+                    loanSubTitle.measure(w, h);
+                    loanFooter.measure(w, h);
+                    loanTips.measure(w, h);
+
+                    double lvHeight = metrics.heightPixels - loanTips.getMeasuredHeight() - loanTitle.getMeasuredHeight() - loanSubTitle.getMeasuredHeight() - loanFooter.getMeasuredHeight() ;
+                    ViewGroup.LayoutParams lvLayoutParams = lv.getLayoutParams();
+                    lvLayoutParams.height = (int)lvHeight;
+                    lv.setLayoutParams(lvLayoutParams);
+
                     TableAdapter tableAdapter = new TableAdapter(HouseLoanActivity.this,months);
                     lv.setAdapter(tableAdapter);
                     /*for(int i=0;i<months.length;i++){
@@ -264,10 +279,15 @@ public class HouseLoanActivity extends AppCompatActivity {
                             LogUtils.v("ScrollView");
                         }
                     });*/
+                } else if(loanType.equals("等额本息")){
+                    //等额本息计算公式 月均还款 a×i×(1＋i)^n÷((1＋i)^n－1)   a-贷款本金总额 i-月利率 n-还款期数
+                    int loanTotal = Integer.parseInt(loanTotal) * 10000; //贷款本金
+                    double i = Float.parseFloat(loanRate) * 0.01 / 12;      //月利率
+                    double perTermMoney = loanTotal *
                 }
             }
 
-            //动态计算ListView的高度 修正ListView在ScrollView里只显示一行的问题
+            //动态计算ListView的高度 修正ListView在ScrollView里只显示一行的问题(废弃)
             private void fixListViewHeight(ListView lv){
                 TableAdapter tableAdapter = (TableAdapter)lv.getAdapter();
                 if(tableAdapter == null){
