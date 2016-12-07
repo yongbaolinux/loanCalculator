@@ -13,7 +13,7 @@
         android:textSize="12sp"
         android:background="@color/colorPrimary"
         android:textColor="@color/colorWhite"
-        android:text="( * 数据仅供参考 )"/>
+        android:text="( * 数据仅供参考 默认单位:元)"/>
     <LinearLayout
         android:id="@+id/loanTitle"
         android:layout_width="match_parent"

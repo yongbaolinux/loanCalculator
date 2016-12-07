@@ -24,12 +24,10 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-
+            android:gravity="center">
             <TextView
                 android:id="@+id/loanTotal"
                 android:layout_width="wrap_content"
@@ -48,7 +46,7 @@
                     android:id="@+id/loanTotalInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
+                    android:maxLines="1"
                     android:background="@null"
                     android:gravity="right"
                     android:textCursorDrawable="@null"
@@ -75,8 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/houseFormRowPaddingTop"
-            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
-
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom"
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,8 +95,8 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,8 +140,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/houseFormRowPaddingTop"
-            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
-
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom"
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -188,7 +186,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/houseFormRowPaddingTop"
-            android:paddingBottom="@dimen/houseFormRowPaddingBottom">
+            android:paddingBottom="@dimen/houseFormRowPaddingBottom"
+            android:gravity="center">
             <Button android:text="计算"
                 android:id="@+id/calculator"
                 android:layout_column="0"
@@ -198,6 +197,5 @@
                 android:background="@color/colorPrimary"/>
         </TableRow>
     </TableLayout>
-
 
 </LinearLayout>

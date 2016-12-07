@@ -75,6 +75,7 @@ public class TableAdapter extends BaseAdapter {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lp.weight = 1.0f;
 
+
         rowTerm.setGravity(Gravity.CENTER);
         rowTerm.setLayoutParams(lp);
         rowTerm.setText(String.valueOf((int) getItem(position)[0]));

@@ -101,7 +101,7 @@ public class HouseLoanActivity extends AppCompatActivity {
 
                 //初始化wheelview
                 final LoopView loopView = new LoopView(HouseLoanActivity.this);
-                ArrayList<String> list = new ArrayList<>();
+                ArrayList<String> list = new ArrayList<String>();
                 for (int i = 1; i <= 30; i++) {
                     list.add(i + "年");
                 }
@@ -117,7 +117,19 @@ public class HouseLoanActivity extends AppCompatActivity {
                 //设置原始数据
                 loopView.setItems(list);
                 //设置初始位置
-                loopView.setInitPosition(5);
+                String loanTime = loanTimeInput.getText().toString();
+                String loanTimeStr = "";
+                int initPos = 5;
+                if(loanTime.length() != 0 ) {
+                    for (int i = 0; i < loanTime.length(); i++) {
+                        if (loanTime.charAt(i) >= 48 && loanTime.charAt(i) <= 57) {
+                            loanTimeStr += loanTime.charAt(i);
+                        }
+                    }
+                    initPos = Integer.parseInt(loanTimeStr) - 1;
+                }
+
+                loopView.setInitPosition(initPos);
                 //设置字体大小
                 loopView.setTextSize(20);
                 wheelviewContainer = (LinearLayout) wheelviewContainerDialogWindow.findViewById(R.id.wheelviewContainer);
@@ -187,8 +199,8 @@ public class HouseLoanActivity extends AppCompatActivity {
                     //等额本金还款方式(计算公式 每月还款金额 = （贷款本金 / 还款月数）+（本金 — 已归还本金累计额）×每月利率)
 
                     double[][] months = new double[loanTimeInt * 12][4];
-                    int loanTotalInt = Integer.parseInt(loanTotal) * 10000; //贷款本金
-                    int perMonthLoan = loanTotalInt / (loanTimeInt * 12);     //每月支付本金;
+                    int loanTotalInt = (int)(Float.parseFloat(loanTotal) * 10000); //贷款本金
+                    float perMonthLoan = loanTotalInt / (loanTimeInt * 12);     //每月支付本金;
                     double interest = 0;                                       //总支付利息
                     for (int i = 0; i < loanTimeInt * 12; i++) {
                         //LogUtils.v(Float.parseFloat(loanRate));
@@ -291,7 +303,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                     //等额本息计算公式
                     //月均还款 a×i×(1＋i)^n÷((1＋i)^n－1)   a-贷款本金总额 i-月利率 n-还款期数
                     //每月利息 (a×i^2×(1+i)^(n-1)) ÷ ((1＋i)^n-1)
-                    int a = Integer.parseInt(loanTotal) * 10000; //贷款本金
+                    int a = (int)(Float.parseFloat(loanTotal) * 10000); //贷款本金
                     double i = Float.parseFloat(loanRate) * 0.01 / 12;      //月利率
                     int n = loanTimeInt*12;                                 //总还款期数
                     double perTermMoney = a * i * Math.pow((1+i),n)/(Math.pow((1+i),n) - 1);    //月均还款
@@ -299,7 +311,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                     for (int t = 0; t < n; t++) {
                         months[t][0] = t + 1;
                         months[t][1] = perTermMoney;
-                        months[t][2] = a * Math.pow(i, 2) * Math.pow((1 + i), (t - 1)) / (Math.pow((1 + i), t) - 1);   //每月所还利息
+                        months[t][2] = a * Math.pow(i, 2) * Math.pow((1 + i), t) / (Math.pow((1 + i), (t+1)) - 1);   //每月所还利息
                         months[t][3] = perTermMoney - months[t][2];        //每月所还本金
                     }
                     //总还款 每月还款 x 总还款期数 总支付利息 总还款-贷款本金总额
@@ -318,7 +330,6 @@ public class HouseLoanActivity extends AppCompatActivity {
                     TextView interestTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.interest);
                     interestTextView.setText(String.format("%.1f",interest) +" ( 元 )");
                     /////
-
                     //关闭数据对话框
                     TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
                     close.setOnClickListener(new View.OnClickListener() {
