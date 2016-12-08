@@ -15,8 +15,10 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.apkfuns.logutils.LogUtils;
@@ -40,8 +42,8 @@ public class DrawView extends View {
     //半径
     private int radis = 80;
     //第一个圆心位置
-    private float oneCircleX = 350;
-    private float oneCircleY = 310;
+    private float oneCircleX;
+    private float oneCircleY;
     //第二个圆心位置
     private float twoCircleX = 120;
     private float twoCircleY = 390;
@@ -82,6 +84,17 @@ public class DrawView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
+        //计算屏幕宽高度
+        WindowManager wmManager=(WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wmManager.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        LogUtils.v(height);
+        radis = width/15;
+        //初始化第一个圆心位置
+        oneCircleX = width / 2;
+        oneCircleY = 1600;
         //初始化文本画笔
         mTextPaint_ = new TextPaint();
         mTextPaint_.setColor(Color.WHITE);
@@ -98,23 +111,16 @@ public class DrawView extends View {
         bao = BitmapFactory.decodeResource(getResources(), R.drawable.bao50);
 
         // Load attributes
-        final TypedArray a = getContext().obtainStyledAttributes(
-                attrs, R.styleable.DrawView, defStyle, 0);
+        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DrawView, defStyle, 0);
 
-        mExampleString = a.getString(
-                R.styleable.DrawView_exampleString);
-        mExampleColor = a.getColor(
-                R.styleable.DrawView_exampleColor,
-                mExampleColor);
+        mExampleString = a.getString(R.styleable.DrawView_exampleString);
+        mExampleColor = a.getColor(R.styleable.DrawView_exampleColor, mExampleColor);
         // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
         // values that should fall on pixel boundaries.
-        mExampleDimension = a.getDimension(
-                R.styleable.DrawView_exampleDimension,
-                mExampleDimension);
+        mExampleDimension = a.getDimension(R.styleable.DrawView_exampleDimension, mExampleDimension);
 
         if (a.hasValue(R.styleable.DrawView_exampleDrawable)) {
-            mExampleDrawable = a.getDrawable(
-                    R.styleable.DrawView_exampleDrawable);
+            mExampleDrawable = a.getDrawable(R.styleable.DrawView_exampleDrawable);
             mExampleDrawable.setCallback(this);
         }
         a.recycle();
