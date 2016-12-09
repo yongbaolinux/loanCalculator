@@ -11,6 +11,7 @@
     android:background="@drawable/bg">
 
     <net.diskroom.loancalculator.DrawView
+        android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:exampleString=""

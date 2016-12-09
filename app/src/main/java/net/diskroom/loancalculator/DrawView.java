@@ -36,11 +36,14 @@ public class DrawView extends View {
     private float mTextWidth;
     private float mTextHeight;
 
+    //画布宽高度
+    private int width = 0;
+    private int height = 0;
     //画笔
     private Paint mPaintCircle;
     private TextPaint mTextPaint_;
     //半径
-    private int radis = 80;
+    private int radis;
     //第一个圆心位置
     private float oneCircleX;
     private float oneCircleY;
@@ -84,17 +87,6 @@ public class DrawView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        //计算屏幕宽高度
-        WindowManager wmManager=(WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        wmManager.getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        LogUtils.v(height);
-        radis = width/15;
-        //初始化第一个圆心位置
-        oneCircleX = width / 2;
-        oneCircleY = 1600;
         //初始化文本画笔
         mTextPaint_ = new TextPaint();
         mTextPaint_.setColor(Color.WHITE);
@@ -146,7 +138,21 @@ public class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        //计算画布宽高度
+        DrawView dv = (DrawView) findViewById(R.id.drawView);
+        height = dv.getHeight();
+        width = dv.getWidth();
+        //半径
+        radis = width / 8;
+        //第一个圆心位置
+        oneCircleX = width / 2;
+        oneCircleY = height / 5 * 2;
+        //第二个圆心位置
+        twoCircleX = width / 3;
+        twoCircleY = height / 5 * 3;
+        //第三个圆心位置
+        threeCircleX = width / 3 * 2;
+        threeCircleY = height / 5 * 3;
         //绘制各按钮
         canvas.drawCircle(oneCircleX, oneCircleY, radis, mPaintCircle);
         canvas.drawCircle(twoCircleX, twoCircleY, radis, mPaintCircle);
