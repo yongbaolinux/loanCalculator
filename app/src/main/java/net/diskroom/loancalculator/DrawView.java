@@ -15,7 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -43,16 +43,16 @@ public class DrawView extends View {
     private Paint mPaintCircle;
     private TextPaint mTextPaint_;
     //半径
-    private int radis;
+    private int radius;
     //第一个圆心位置
     private float oneCircleX;
     private float oneCircleY;
     //第二个圆心位置
-    private float twoCircleX = 120;
-    private float twoCircleY = 390;
+    private float twoCircleX;
+    private float twoCircleY;
     //第三个圆心位置
-    private float threeCircleX = 300;
-    private float threeCircleY = 543;
+    private float threeCircleX;
+    private float threeCircleY;
     //各按钮背景图资源及绘制位置
     private Bitmap car;
     private Bitmap house;
@@ -64,12 +64,12 @@ public class DrawView extends View {
     private float baoLeft = threeCircleX - 35;
     private float baoTop= threeCircleY - 50;
     //各按钮文字绘制位置
-    private float carStringX = oneCircleX - 20;
-    private float carStringY = oneCircleY + 50;
-    private float houseStringX = twoCircleX - 20;
-    private float houseStringY = twoCircleY + 50;
-    private float baoStringX = threeCircleX - 30;
-    private float baoStringY = threeCircleY + 50;
+    private float carStringX;
+    private float carStringY;
+    private float houseStringX;
+    private float houseStringY;
+    private float baoStringX;
+    private float baoStringY;
 
     public DrawView(Context context) {
         super(context);
@@ -86,11 +86,21 @@ public class DrawView extends View {
         init(attrs, defStyle);
     }
 
+    /**
+     * 将sp值转换为px值，保证文字大小不变
+     * @param spValue
+     * @return
+     */
+    public static int sp2px(Context context, float spValue) {
+        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (spValue * fontScale + 0.5f);
+    }
+
     private void init(AttributeSet attrs, int defStyle) {
         //初始化文本画笔
         mTextPaint_ = new TextPaint();
         mTextPaint_.setColor(Color.WHITE);
-        mTextPaint_.setTextSize(22);
+        mTextPaint_.setTextSize(sp2px(getContext(),18));
 
         //初始化按钮圆形画笔
         mPaintCircle = new Paint();
@@ -101,27 +111,22 @@ public class DrawView extends View {
         car = BitmapFactory.decodeResource(getResources(), R.drawable.car50);
         house = BitmapFactory.decodeResource(getResources(), R.drawable.house50);
         bao = BitmapFactory.decodeResource(getResources(), R.drawable.bao50);
-
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DrawView, defStyle, 0);
-
         mExampleString = a.getString(R.styleable.DrawView_exampleString);
         mExampleColor = a.getColor(R.styleable.DrawView_exampleColor, mExampleColor);
         // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
         // values that should fall on pixel boundaries.
         mExampleDimension = a.getDimension(R.styleable.DrawView_exampleDimension, mExampleDimension);
-
         if (a.hasValue(R.styleable.DrawView_exampleDrawable)) {
             mExampleDrawable = a.getDrawable(R.styleable.DrawView_exampleDrawable);
             mExampleDrawable.setCallback(this);
         }
         a.recycle();
-
         // Set up a default TextPaint object
         mTextPaint = new TextPaint();
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextAlign(Paint.Align.LEFT);
-
         // Update TextPaint and text measurements from attributes
         invalidateTextPaintAndMeasurements();
     }
@@ -130,7 +135,6 @@ public class DrawView extends View {
         mTextPaint.setTextSize(mExampleDimension);
         mTextPaint.setColor(mExampleColor);
         mTextWidth = mTextPaint.measureText(mExampleString);
-
         Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
         mTextHeight = fontMetrics.bottom;
     }
@@ -143,7 +147,7 @@ public class DrawView extends View {
         height = dv.getHeight();
         width = dv.getWidth();
         //半径
-        radis = width / 8;
+        radius = width / 8;
         //第一个圆心位置
         oneCircleX = width / 2;
         oneCircleY = height / 5 * 2;
@@ -153,10 +157,20 @@ public class DrawView extends View {
         //第三个圆心位置
         threeCircleX = width / 3 * 2;
         threeCircleY = height / 5 * 3;
+        //各按钮文字绘制位置
+        carStringX = oneCircleX - mTextPaint_.measureText("车贷")/2;
+        carStringY = oneCircleY + radius/2;
+        houseStringX = twoCircleX - mTextPaint_.measureText("房贷")/2;
+        houseStringY = twoCircleY + radius/2;
+        baoStringX = threeCircleX - mTextPaint_.measureText("余额宝")/2;
+        baoStringY = threeCircleY + radius/2;
+        //各按钮背景图绘制位置
+        carLeft = oneCircleX;
+        carTop = oneCircleY;
         //绘制各按钮
-        canvas.drawCircle(oneCircleX, oneCircleY, radis, mPaintCircle);
-        canvas.drawCircle(twoCircleX, twoCircleY, radis, mPaintCircle);
-        canvas.drawCircle(threeCircleX, threeCircleY, radis, mPaintCircle);
+        canvas.drawCircle(oneCircleX, oneCircleY, radius, mPaintCircle);
+        canvas.drawCircle(twoCircleX, twoCircleY, radius, mPaintCircle);
+        canvas.drawCircle(threeCircleX, threeCircleY, radius, mPaintCircle);
 
         //绘制各按钮背景图
         canvas.drawBitmap(car, carLeft,carTop, null);
@@ -279,18 +293,18 @@ public class DrawView extends View {
         double carDistance = getDistance(x,y,oneCircleX,oneCircleY);
         double houseDistance = getDistance(x,y,twoCircleX,twoCircleY);
         double baoDistance = getDistance(x,y,threeCircleX,threeCircleY);
-        if(carDistance < radis){
+        if(carDistance < radius){
             //打开车贷页
             //Toast.makeText(getContext(),"车贷",Toast.LENGTH_LONG).show();
             Intent openCarLoan = new Intent(getContext(),CarLoanActivity.class);
             getContext().startActivity(openCarLoan);
         }
-        if(houseDistance < radis){
+        if(houseDistance < radius){
             //打开房贷页
             Intent openHouseLoan = new Intent(getContext(),HouseLoanActivity.class);
             getContext().startActivity(openHouseLoan);
         }
-        if(baoDistance < radis){
+        if(baoDistance < radius){
             //打开余额宝页
             Intent openBao = new Intent(getContext(),BaoActivity.class);
             getContext().startActivity(openBao);
