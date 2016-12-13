@@ -41,6 +41,7 @@ public class DrawView extends View {
     private int height = 0;
     //画笔
     private Paint mPaintCircle;
+    private Paint mPaintCircle2;
     private TextPaint mTextPaint_;
     //半径
     private int radius;
@@ -108,6 +109,12 @@ public class DrawView extends View {
         mPaintCircle.setAntiAlias(true);         //抗锯齿效果
         mPaintCircle.setColor(getResources().getColor(R.color.colorCircleButton));
 
+        mPaintCircle2 = new Paint();
+        mPaintCircle2.setStyle(Paint.Style.FILL); //实心圆还是空心圆
+        mPaintCircle2.setAntiAlias(true);         //抗锯齿效果
+        mPaintCircle2.setColor(Color.WHITE);
+
+
         car = BitmapFactory.decodeResource(getResources(), R.drawable.car50);
         house = BitmapFactory.decodeResource(getResources(), R.drawable.house50);
         bao = BitmapFactory.decodeResource(getResources(), R.drawable.bao50);
@@ -165,18 +172,21 @@ public class DrawView extends View {
         baoStringX = threeCircleX - mTextPaint_.measureText("余额宝")/2;
         baoStringY = threeCircleY + radius/2;
         //各按钮背景图绘制位置
-        carLeft = oneCircleX;
-        carTop = oneCircleY;
+        carLeft = oneCircleX-25;
+        carTop = oneCircleY-25;
         //绘制各按钮
         canvas.drawCircle(oneCircleX, oneCircleY, radius, mPaintCircle);
         canvas.drawCircle(twoCircleX, twoCircleY, radius, mPaintCircle);
         canvas.drawCircle(threeCircleX, threeCircleY, radius, mPaintCircle);
 
+
         //绘制各按钮背景图
         canvas.drawBitmap(car, carLeft,carTop, null);
         canvas.drawBitmap(house, houseLeft,houseTop, null);
         canvas.drawBitmap(bao, baoLeft,baoTop, null);
-
+        //canvas.drawCircle(oneCircleX,oneCircleY,2,mPaintCircle2);
+        LogUtils.v(car.getWidth());
+        LogUtils.v(car.getHeight());
         //绘制各按钮文字
         canvas.drawText(getContext().getString(R.string.carButton),carStringX,carStringY,mTextPaint_);
         canvas.drawText(getContext().getString(R.string.houseButton),houseStringX,houseStringY,mTextPaint_);
