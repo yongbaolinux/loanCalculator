@@ -11,4 +11,8 @@
     <dimen name="houseFormInput">18sp</dimen>
     <dimen name="houseFormRowPaddingTop">12dp</dimen>
     <dimen name="houseFormRowPaddingBottom">12dp</dimen>
+    <dimen name="carForm">20sp</dimen>
+    <dimen name="carFormInput">18sp</dimen>
+    <dimen name="carFormRowPaddingTop">12dp</dimen>
+    <dimen name="carFormRowPaddingBottom">12dp</dimen>
 </resources>

@@ -8,10 +8,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="net.diskroom.loancalculator.carLoanActivity"
+    tools:context="net.diskroom.loancalculator.CarLoanActivity"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,91 +25,182 @@
             android:text="@string/title_activity_main"
             android:textColor="@android:color/white"
             android:textSize="@dimen/toolbar_fontsize" />
-    </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>-->
 
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
+        android:layout_height="match_parent">
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="房贷金额"
-                android:id="@+id/loanTotal"
-                android:layout_column="0" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/loanTotalEditText"
+                android:text="爱车价格"
+                android:id="@+id/carLoanTotal"
+                android:textSize="@dimen/carForm"
+                android:layout_column="0"
+                android:layout_gravity="center_vertical"/>
+            <LinearLayout
                 android:layout_column="1"
-                android:layout_span="2" />
+                android:layout_span="2"
+                android:layout_gravity="right"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <EditText
+                    android:id="@+id/loanTotalInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:textCursorDrawable="@null"
+                    android:hint="0"
+                    android:textSize="@dimen/carFormInput"
+                    android:paddingTop="@dimen/houseFormRowPaddingTop"
+                    android:paddingBottom="@dimen/houseFormRowPaddingBottom"
+                    android:width="100dp"
+                    android:textColor="@color/colorInput"
+                    android:layout_marginRight="10dp"
+                    android:digits="1234567890."/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="万元"
+                    android:textSize="@dimen/carFormInput"
+                    android:id="@+id/loanTotalUnit" />
+            </LinearLayout>
 
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="房贷年限"
-                android:id="@+id/loanTime"
-                android:layout_column="0" />
-
-            <ScrollView
+                android:text="车贷期限"
+                android:id="@+id/carLoanTime"
+                android:textSize="@dimen/carForm"/>
+            <TextView
+                android:id="@+id/loanTimeInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/loanTimeScrollView"
-                android:layout_column="1"
-                android:fillViewport="false" />
+                android:hint="请选择车贷期限"
+                android:layout_span="2"
+                android:gravity="right"
+                android:textSize="@dimen/carFormInput" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="房贷利率"
+                android:text="车贷利率"
                 android:id="@+id/loanRate"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:textSize="@dimen/carForm"
+                android:layout_gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_column="1"
+                android:layout_span="2"
+                android:layout_gravity="right"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/loanRateInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="请输入年利率"
+                    android:gravity="right"
+                    android:textColor="@color/colorInput"
+                    android:maxLines="1"
+                    android:textCursorDrawable="@null"
+                    android:layout_column="0"
+                    android:layout_span="2"
+                    android:background="@null"
+                    android:layout_marginRight="8dp"
+                    android:textSize="@dimen/carFormInput"
+                    android:paddingTop="@dimen/carFormRowPaddingTop"
+                    android:paddingBottom="@dimen/carFormRowPaddingBottom"
+                    android:digits="1234567890."/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="%"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/carFormRowPaddingTop"
+            android:paddingBottom="@dimen/carFormRowPaddingBottom"
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="还款方式"
                 android:id="@+id/loanType"
-                android:layout_column="0" />
+                android:layout_column="0"
+                android:textSize="@dimen/carForm"/>
+            <RadioGroup
+                android:id="@+id/loanTypeRadio"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/averagePlus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="等额本息"
+                    android:layout_column="1"
+                    android:textColor="@color/colorInput"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="5dp"
+                    android:drawablePadding="2dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_"
+                    android:textSize="@dimen/carFormInput"
+                    />
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="等额本金"
-                android:id="@+id/averageCapital"
-                android:layout_column="1"
-                android:checked="true" />
+                <RadioButton
+                    android:id="@+id/averageCapital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="等额本金"
+                    android:layout_column="2"
+                    android:checked="true"
+                    android:textColor="@color/colorRadio"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_"
+                    android:textSize="@dimen/carFormInput"
+                    android:drawablePadding="2dp"
+                    />
+            </RadioGroup>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/carFormRowPaddingTop"
+            android:paddingBottom="@dimen/carFormRowPaddingBottom"
+            android:gravity="center">
 
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="等额本息"
-                android:id="@+id/averagePlus"
-                android:layout_column="2"
-                android:checked="false" />
+            <Button android:text="计算"
+                android:id="@+id/calculator"
+                android:layout_column="0"
+                android:layout_span="2"
+                android:textSize="@dimen/carForm"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorPrimary"/>
         </TableRow>
 
     </TableLayout>
