@@ -97,6 +97,11 @@ public class DrawView extends View {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    public static int px2dp(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
     private void init(AttributeSet attrs, int defStyle) {
         //初始化文本画笔
         mTextPaint_ = new TextPaint();
