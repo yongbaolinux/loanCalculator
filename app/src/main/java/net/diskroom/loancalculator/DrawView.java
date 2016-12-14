@@ -120,9 +120,9 @@ public class DrawView extends View {
         mPaintCircle2.setColor(Color.WHITE);
 
 
-        car = BitmapFactory.decodeResource(getResources(), R.drawable.car50);
-        house = BitmapFactory.decodeResource(getResources(), R.drawable.house50);
-        bao = BitmapFactory.decodeResource(getResources(), R.drawable.bao50);
+        car = BitmapFactory.decodeResource(getResources(), R.drawable.car);
+        house = BitmapFactory.decodeResource(getResources(), R.drawable.house);
+        bao = BitmapFactory.decodeResource(getResources(), R.drawable.bao);
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DrawView, defStyle, 0);
         mExampleString = a.getString(R.styleable.DrawView_exampleString);
@@ -177,8 +177,12 @@ public class DrawView extends View {
         baoStringX = threeCircleX - mTextPaint_.measureText("余额宝")/2;
         baoStringY = threeCircleY + radius/2;
         //各按钮背景图绘制位置
-        carLeft = oneCircleX-25;
-        carTop = oneCircleY-25;
+        carLeft = oneCircleX-car.getWidth()/2;
+        carTop = oneCircleY-car.getHeight()/2-radius/3;
+        houseLeft = twoCircleX-house.getWidth()/2;
+        houseTop = twoCircleY-house.getHeight()/2-radius/3;
+        baoLeft = threeCircleX-bao.getWidth()/2;
+        baoTop = threeCircleY-bao.getHeight()/2-radius/3;
         //绘制各按钮
         canvas.drawCircle(oneCircleX, oneCircleY, radius, mPaintCircle);
         canvas.drawCircle(twoCircleX, twoCircleY, radius, mPaintCircle);
@@ -190,8 +194,8 @@ public class DrawView extends View {
         canvas.drawBitmap(house, houseLeft,houseTop, null);
         canvas.drawBitmap(bao, baoLeft,baoTop, null);
         //canvas.drawCircle(oneCircleX,oneCircleY,2,mPaintCircle2);
-        LogUtils.v(car.getWidth());
-        LogUtils.v(car.getHeight());
+        //LogUtils.v(car.getWidth());
+        //LogUtils.v(car.getHeight());
         //绘制各按钮文字
         canvas.drawText(getContext().getString(R.string.carButton),carStringX,carStringY,mTextPaint_);
         canvas.drawText(getContext().getString(R.string.houseButton),houseStringX,houseStringY,mTextPaint_);
