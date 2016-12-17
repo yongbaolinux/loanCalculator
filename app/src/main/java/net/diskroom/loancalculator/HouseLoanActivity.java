@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.media.audiofx.LoudnessEnhancer;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.BoringLayout;
 import android.text.Layout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -188,10 +190,11 @@ public class HouseLoanActivity extends AppCompatActivity {
                 }
                 //验证房贷利率
                 String loanRate = loanRateInput.getText().toString();
-                if (loanTotal == null || loanTotal.length() == 0 || loanTotal.equals("")) {
-                    Toast.makeText(HouseLoanActivity.this, "请输入房贷月利率", Toast.LENGTH_LONG).show();
+                if (loanRate == null || loanRate.length() == 0 || loanRate.equals("")) {
+                    Toast.makeText(HouseLoanActivity.this, "请输入房贷年利率", Toast.LENGTH_LONG).show();
                     return;
                 }
+
                 //获取还款方式
                 RadioButton currentRadioButton = (RadioButton) findViewById(loanTypeRadio.getCheckedRadioButtonId());
                 String loanType = currentRadioButton.getText().toString();
