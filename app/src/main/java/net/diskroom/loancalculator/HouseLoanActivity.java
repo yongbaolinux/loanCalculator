@@ -139,7 +139,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                 layoutParams.gravity = Gravity.CENTER;
                 wheelviewContainer.addView(loopView, layoutParams);
                 //确定房贷年限选择
-                TextView loanTimeSure = (TextView) wheelviewContainerDialogWindow.findViewById(R.id.switch_city_dialog_sure);
+                TextView loanTimeSure = (TextView) wheelviewContainerDialogWindow.findViewById(R.id._dialog_sure);
                 loanTimeSure.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -149,7 +149,7 @@ public class HouseLoanActivity extends AppCompatActivity {
                     }
                 });
                 //取消房贷年限选择
-                TextView loanTimeCancel = (TextView) wheelviewContainerDialogWindow.findViewById(R.id.switch_city_dialog_cancel);
+                TextView loanTimeCancel = (TextView) wheelviewContainerDialogWindow.findViewById(R.id._dialog_cancel);
                 loanTimeCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
