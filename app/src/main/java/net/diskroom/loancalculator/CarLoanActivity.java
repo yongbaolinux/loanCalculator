@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class CarLoanActivity extends AppCompatActivity {
     private TextView carloanDownPaymentInput;   //首付比例
     private TextView carloanTimeInput;          //车贷期数
     private TextView carloanRateInput;          //车贷年利率
+    private Button calculator;                  //计算按钮
 
     private AlertDialog carloanDialog;      //选择车贷期数对话框对象
     private Window    carloanWindow;      //选择车贷期数对话框窗口对象
@@ -34,7 +36,14 @@ public class CarLoanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_loan);
         initial();
-
+        //绑定计算事件
+        calculator = (Button)findViewById(R.id.calculator);
+        calculator.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                //验证各输入控件的值是否合法
+                
+            }
+        });
     }
 
     public void initial(){
