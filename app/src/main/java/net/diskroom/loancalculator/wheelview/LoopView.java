@@ -40,7 +40,7 @@ public class LoopView extends View {
     Paint paintCenterText;
     Paint paintIndicator;
 
-    List<String> items;
+    public List<String> items;
 
     int textSize;
     int maxTextWidth;
@@ -272,6 +272,10 @@ public class LoopView extends View {
 
     public final int getSelectedItem() {
         return selectedItem;
+    }
+
+    public final String getSelectedItemValue(){
+        return items.get(selectedItem);
     }
 //
 //    protected final void scrollBy(float velocityY) {
