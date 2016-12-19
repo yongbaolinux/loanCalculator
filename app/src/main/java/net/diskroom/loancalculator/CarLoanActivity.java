@@ -98,7 +98,7 @@ public class CarLoanActivity extends AppCompatActivity {
             loopView = new LoopView(CarLoanActivity.this);
         }
         //设置数据
-        
+
         loopView.setItems(listData);
         //设置是否循环播放
         //loopView.setNotLoop();
