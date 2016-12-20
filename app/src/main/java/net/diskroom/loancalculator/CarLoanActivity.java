@@ -1,6 +1,7 @@
 package net.diskroom.loancalculator;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -24,6 +25,8 @@ import net.diskroom.loancalculator.wheelview.LoopView;
 import net.diskroom.loancalculator.wheelview.OnItemSelectedListener;
 
 import java.util.ArrayList;
+
+import static android.R.attr.data;
 
 public class CarLoanActivity extends AppCompatActivity {
     private EditText carloanTotalInput;             //车价输入框对象
@@ -54,144 +57,26 @@ public class CarLoanActivity extends AppCompatActivity {
         calculator = (Button)findViewById(R.id.calculator);
         calculator.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-            //验证表单
-            if(validForm() == false){
-                return;
-            }
-            if(carloanType == 1){
-                //等额本息
-                //月均还款 a×i×(1＋i)^n÷((1＋i)^n－1)   a-贷款本金总额 i-月利率 n-还款期数
-                //每月利息 (a×i^2×(1+i)^(n-1)) ÷ ((1＋i)^n-1)
-                float a = carloanTotalInputValue - (carloanTotalInputValue*carloanDownPaymentInputValue);    //贷款本金
-                double i = carloanRateInputValue * 0.01 / 12;      //月利率
-                int n = carloanTimeInputValue * 12;                                 //总还款期数
-                double perTermMoney = a * i * Math.pow((1+i),n)/(Math.pow((1+i),n) - 1);    //月均还款
-                double[][] months = new double[n][4];
-                for (int t = 0; t < n; t++) {
-                    months[t][0] = t + 1;
-                    months[t][1] = perTermMoney;
-                    months[t][2] = a * Math.pow(i, 2) * Math.pow((1 + i), t) / (Math.pow((1 + i), (t+1)) - 1);   //每月所还利息
-                    months[t][3] = perTermMoney - months[t][2];        //每月所还本金
+                //验证表单
+                if(validForm() == false){
+                    return;
                 }
-                //总还款 每月还款 x 总还款期数 总支付利息 总还款-贷款本金总额
-                double total = perTermMoney * n;
-                double interest = total - a;
-                //展示计算结果
-                final AlertDialog calculatorDataDialog = new AlertDialog.Builder(CarLoanActivity.this,R.style.Dialog_FS).setCancelable(true).create();
-                Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
-                calculatorDataDialog.show();
-                calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
-                //设置贷款类型 还款总额和总支付利息
-                TextView loanTypeTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.loanType);
-                loanTypeTextView.setText("等额本息");
-                TextView totalTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.total);
-                totalTextView.setText(String.format("%.1f",total) +" ( 元 )");
-                TextView interestTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.interest);
-                interestTextView.setText(String.format("%.1f",interest) +" ( 元 )");
-                /////
-                //关闭数据对话框
-                TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        calculatorDataDialog.dismiss();
-                    }
-
-                });
-                //////
-
-                //动态计算并设置listview的高度
-                DisplayMetrics metrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                TextView loanTips = (TextView)calculatorDataDialogWindow.findViewById(R.id.loanTips); //小提示
-                LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle); //标题
-                TableLayout loanSubTitle = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.loanSubTitle); //副标题
-                ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);       //listview
-                LinearLayout loanFooter = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanFooter);   //底部
-
-                int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
-                int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
-                loanTitle.measure(w, h);
-                loanSubTitle.measure(w, h);
-                loanFooter.measure(w, h);
-                loanTips.measure(w, h);
-
-                double lvHeight = metrics.heightPixels - loanTips.getMeasuredHeight() - loanTitle.getMeasuredHeight() - loanSubTitle.getMeasuredHeight() - loanFooter.getMeasuredHeight() ;
-                ViewGroup.LayoutParams lvLayoutParams = lv.getLayoutParams();
-                lvLayoutParams.height = (int)lvHeight;
-                lv.setLayoutParams(lvLayoutParams);
-                //////
-
-                TableAdapter tableAdapter = new TableAdapter(CarLoanActivity.this,months);
-                lv.setAdapter(tableAdapter);
-            } else if(carloanType == 2){
-
-                //等额本金
-                //计算公式 每月还款金额 = （贷款本金 / 还款月数）+（贷款本金 — 已归还本金累计额）×每月利率
-                double[][] months = new double[carloanTimeInputValue * 12][4];
-                float a = carloanTotalInputValue - (carloanTotalInputValue*carloanDownPaymentInputValue); //贷款本金
-                float perMonthLoan = a / (carloanTimeInputValue * 12);     //每月支付本金;
-                double interest = 0;                                       //总支付利息
-                for (int i = 0; i < carloanTimeInputValue * 12; i++) {
-                    //LogUtils.v(Float.parseFloat(loanRate));
-                    months[i][0] = i + 1;
-                    months[i][1] = perMonthLoan + (a - i * perMonthLoan) * carloanRateInputValue * 0.01 / 12;   //每月还款
-                    months[i][2] = (a - i * perMonthLoan) * carloanRateInputValue * 0.01 / 12;                  //每月利息
-                    months[i][3] = perMonthLoan;                                                                //每月本金
-                    interest += months[i][2];
+                if(carloanType == 1){
+                    //等额本息
+                    //月均还款 a×i×(1＋i)^n÷((1＋i)^n－1)   a-贷款本金总额 i-月利率 n-还款期数
+                    //每月利息 (a×i^2×(1+i)^(n-1)) ÷ ((1＋i)^n-1)
+                    float a = carloanTotalInputValue - (carloanTotalInputValue*carloanDownPaymentInputValue);    //贷款本金
+                    double i = carloanRateInputValue * 0.01 / 12;      //月利率
+                    int n = carloanTimeInputValue * 12;                                 //总还款期数
+                    calculator(CarLoanActivity.this,a,i,n,1);
+                } else if(carloanType == 2){
+                    //等额本金
+                    //计算公式 每月还款金额 = （贷款本金 / 还款月数）+（贷款本金 — 已归还本金累计额）×每月利率
+                    float a = carloanTotalInputValue - (carloanTotalInputValue*carloanDownPaymentInputValue); //贷款本金
+                    double i = carloanRateInputValue * 0.01 / 12;      //月利率
+                    int n = carloanTimeInputValue * 12;                //总还款期数
+                    calculator(CarLoanActivity.this,a,i,n,2);
                 }
-                //LogUtils.v(months);
-                double total = a + interest;             //总还款金额
-
-                //展示计算结果
-                final AlertDialog calculatorDataDialog = new AlertDialog.Builder(CarLoanActivity.this,R.style.Dialog_FS).setCancelable(true).create();
-                Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
-                calculatorDataDialog.show();
-                calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
-                //设置贷款类型 还款总额和总支付利息
-                TextView loanTypeTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.loanType);
-                loanTypeTextView.setText("等额本金");
-                TextView totalTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.total);
-                totalTextView.setText(String.format("%.1f",total)+" ( 元 )");
-                TextView interestTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.interest);
-                interestTextView.setText(String.format("%.1f",interest) + " ( 元 )");
-                //关闭数据对话框
-                TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        calculatorDataDialog.dismiss();
-                    }
-
-                });
-
-                //显示还贷数据 addview 的方式显示 效率极低
-                //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
-                //calculateDataTable.setStretchAllColumns(true);
-
-                DisplayMetrics metrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                TextView loanTips = (TextView)calculatorDataDialogWindow.findViewById(R.id.loanTips); //小提示
-                LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle); //标题
-                TableLayout loanSubTitle = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.loanSubTitle); //副标题
-                ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);       //listview
-                LinearLayout loanFooter = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanFooter);   //底部
-
-                int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
-                int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
-                loanTitle.measure(w, h);
-                loanSubTitle.measure(w, h);
-                loanFooter.measure(w, h);
-                loanTips.measure(w, h);
-
-                double lvHeight = metrics.heightPixels - loanTips.getMeasuredHeight() - loanTitle.getMeasuredHeight() - loanSubTitle.getMeasuredHeight() - loanFooter.getMeasuredHeight() ;
-                ViewGroup.LayoutParams lvLayoutParams = lv.getLayoutParams();
-                lvLayoutParams.height = (int)lvHeight;
-                lv.setLayoutParams(lvLayoutParams);
-
-                TableAdapter tableAdapter = new TableAdapter(CarLoanActivity.this,months);
-                lv.setAdapter(tableAdapter);
-            }
             }
         });
     }
@@ -393,5 +278,90 @@ public class CarLoanActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * 弹出计算结果页面
+     * @param context   上下文环境
+     * @param a         贷款本金
+     * @param i         贷款月利率
+     * @param n         还款期数
+     * @param loanType  还款方式 1等额本息 2等额本金
+     */
+    private void calculator(Context context, float a,double i,int n,int loanType){
+        double total = 0;               //总还款金额
+        double interest = 0;            //总支付利息
+        double[][] months = new double[n][4];;              //还款详情
+        if(loanType == 1) {
+            double perTermMoney = a * i * Math.pow((1 + i), n) / (Math.pow((1 + i), n) - 1);    //月均还款
+            for (int t = 0; t < n; t++) {
+                months[t][0] = t + 1;
+                months[t][1] = perTermMoney;
+                months[t][2] = a * Math.pow(i, 2) * Math.pow((1 + i), t) / (Math.pow((1 + i), (t + 1)) - 1);   //每月所还利息
+                months[t][3] = perTermMoney - months[t][2];        //每月所还本金
+            }
+            //总还款=每月还款 x 总还款期数  总支付利息=总还款-贷款本金总额
+            total = perTermMoney * n;
+            interest = total - a;
+        } else if(loanType == 2){
+            float perMonthLoan = a / n;     //每月支付本金;
+            for (int t = 0; t < n; t++) {
+                //LogUtils.v(Float.parseFloat(loanRate));
+                months[t][0] = t + 1;
+                months[t][1] = perMonthLoan + (a - t * perMonthLoan) * i;   //每月还款
+                months[t][2] = (a - t * perMonthLoan) * i;                  //每月利息
+                months[t][3] = perMonthLoan;                                                                //每月本金
+                interest += months[t][2];
+            }
+            //LogUtils.v(months);
+            total = a + interest;             //总还款金额
+        }
+        //展示计算结果
+        final AlertDialog calculatorDataDialog = new AlertDialog.Builder(CarLoanActivity.this,R.style.Dialog_FS).setCancelable(true).create();
+        Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
+        calculatorDataDialog.show();
+        calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
+        //设置贷款类型 还款总额和总支付利息
+        TextView loanTypeTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.loanType);
+        loanTypeTextView.setText("等额本息");
+        TextView totalTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.total);
+        totalTextView.setText(String.format("%.1f",total) +" ( 元 )");
+        TextView interestTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.interest);
+        interestTextView.setText(String.format("%.1f",interest) +" ( 元 )");
+        /////
+        //关闭数据对话框
+        TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculatorDataDialog.dismiss();
+            }
+
+        });
+        //////
+
+        //动态计算并设置listview的高度
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        TextView loanTips = (TextView)calculatorDataDialogWindow.findViewById(R.id.loanTips); //小提示
+        LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle); //标题
+        TableLayout loanSubTitle = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.loanSubTitle); //副标题
+        ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);       //listview
+        LinearLayout loanFooter = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanFooter);   //底部
+
+        int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+        loanTitle.measure(w, h);
+        loanSubTitle.measure(w, h);
+        loanFooter.measure(w, h);
+        loanTips.measure(w, h);
+
+        double lvHeight = metrics.heightPixels - loanTips.getMeasuredHeight() - loanTitle.getMeasuredHeight() - loanSubTitle.getMeasuredHeight() - loanFooter.getMeasuredHeight() ;
+        ViewGroup.LayoutParams lvLayoutParams = lv.getLayoutParams();
+        lvLayoutParams.height = (int)lvHeight;
+        lv.setLayoutParams(lvLayoutParams);
+        //////
+        TableAdapter tableAdapter = new TableAdapter(context,months);
+        lv.setAdapter(tableAdapter);
     }
 }
