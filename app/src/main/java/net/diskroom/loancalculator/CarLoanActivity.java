@@ -279,7 +279,7 @@ public class CarLoanActivity extends AppCompatActivity {
         }
         return true;
     }
-    
+
     /**
      * 弹出计算结果页面
      * @param context   上下文环境
