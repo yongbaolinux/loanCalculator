@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apkfuns.logutils.LogUtils;
 
@@ -21,27 +22,41 @@ import java.util.ArrayList;
 
 public class CarLoanActivity extends AppCompatActivity {
     private EditText carloanTotalInput;         //车贷金额输入框
-    private TextView carloanDownPaymentInput;   //首付比例
-    private TextView carloanTimeInput;          //车贷期数
-    private TextView carloanRateInput;          //车贷年利率
-    private Button calculator;                  //计算按钮
+    private TextView carloanDownPaymentInput;   //首付比例控件对象
+    private TextView carloanTimeInput;          //车贷期数控件对象
+    private TextView carloanRateInput;          //车贷年利率控件对象
+    private Button calculator;                  //计算按钮控件对希望
 
-    private AlertDialog carloanDialog;      //选择车贷期数对话框对象
-    private Window    carloanWindow;      //选择车贷期数对话框窗口对象
-    private LinearLayout loopViewContainer;    // loopView容器
+    private AlertDialog carloanDialog;          //选择车贷期数对话框对象
+    private Window    carloanWindow;            //选择车贷期数对话框窗口对象
+    private LinearLayout loopViewContainer;     // loopView容器
     private LoopView loopView;
+
+    private float carloanTotalInputValue = 0;            //车贷金额输入值（单位:万）
+    private float carloanDownPaymentInputValue= 0.3f;    //车贷首付比例数值
+    private int carloanTimeInputValue;                   //车贷期数值
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_loan);
         initial();
-        //绑定计算事件
+        //计算
         calculator = (Button)findViewById(R.id.calculator);
         calculator.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 //验证各输入控件的值是否合法
-                
+                String carloanTotalInputValue_ = carloanTotalInput.getText().toString();
+                if(carloanTotalInputValue_.length() == 0){
+                    Toast.makeText(CarLoanActivity.this, "请输入爱车价格", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    carloanTotalInputValue = Float.parseFloat(carloanTotalInputValue_);
+                    LogUtils.v(carloanTotalInputValue);
+                }
+
             }
         });
     }
@@ -83,7 +98,9 @@ public class CarLoanActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         carloanDialog.dismiss();
-                        carloanDownPaymentInput.setText(String.valueOf(intval(loopView.getSelectedItemValue())));    //直接setText一个整数会失效
+                        int value = intval(loopView.getSelectedItemValue());
+                        carloanDownPaymentInput.setText(String.valueOf(value));    //直接setText一个整数会失效
+                        carloanDownPaymentInputValue = value/100;
                         loopViewContainer.removeAllViews();     //因为Dialog是在外部维护的一个变量 所以关闭之后需要removewAllViews
                     }
                 });
