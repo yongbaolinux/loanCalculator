@@ -3,13 +3,18 @@ package net.diskroom.loancalculator;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,22 +26,24 @@ import net.diskroom.loancalculator.wheelview.OnItemSelectedListener;
 import java.util.ArrayList;
 
 public class CarLoanActivity extends AppCompatActivity {
-    private EditText carloanTotalInput;         //车贷金额输入框
-    private TextView carloanDownPaymentInput;   //首付比例控件对象
-    private TextView carloanTimeInput;          //车贷期数控件对象
-    private TextView carloanRateInput;          //车贷年利率控件对象
-    private Button calculator;                  //计算按钮控件对希望
+    private EditText carloanTotalInput;             //车价输入框对象
+    private TextView carloanDownPaymentInput;       //首付比例控件对象
+    private TextView carloanTimeInput;              //车贷期数控件对象
+    private TextView carloanRateInput;              //车贷年利率控件对象
+    private RadioButton carloanTypeAveragePlus;     //等额本息RadioButton对象
+    private RadioButton carloanTypeAverageCapital;  //等额本金RadioButton对象
+    private Button calculator;                      //计算按钮控件对象
 
-    private AlertDialog carloanDialog;          //选择车贷期数对话框对象
-    private Window    carloanWindow;            //选择车贷期数对话框窗口对象
-    private LinearLayout loopViewContainer;     // loopView容器
+    private AlertDialog carloanDialog;              //选择车贷期数对话框对象
+    private Window    carloanWindow;                //选择车贷期数对话框窗口对象
+    private LinearLayout loopViewContainer;         // loopView容器
     private LoopView loopView;
 
-    private float carloanTotalInputValue = 0;            //车贷金额输入值（单位:万）
+    private int carloanTotalInputValue = 0;              //车价输入值（单位:元）
     private float carloanDownPaymentInputValue= 0.3f;    //车贷首付比例数值
-    private int carloanTimeInputValue;                   //车贷期数值
-
-
+    private int carloanTimeInputValue = 0;               //车贷期限数值
+    private float carloanRateInputValue = 0.0f;          //车贷基准年利率
+    private int carloanType = 2;                         //还贷方式 1等额本息 2等额本金
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +54,149 @@ public class CarLoanActivity extends AppCompatActivity {
         calculator = (Button)findViewById(R.id.calculator);
         calculator.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                //验证各输入控件的值是否合法
-                String carloanTotalInputValue_ = carloanTotalInput.getText().toString();
-                if(carloanTotalInputValue_.length() == 0){
-                    Toast.makeText(CarLoanActivity.this, "请输入爱车价格", Toast.LENGTH_LONG).show();
-                    return;
-                } else {
-                    carloanTotalInputValue = Float.parseFloat(carloanTotalInputValue_);
-                    LogUtils.v(carloanTotalInputValue);
+            //验证表单
+            if(validForm() == false){
+                return;
+            }
+            if(carloanType == 1){
+                //等额本息
+                //月均还款 a×i×(1＋i)^n÷((1＋i)^n－1)   a-贷款本金总额 i-月利率 n-还款期数
+                //每月利息 (a×i^2×(1+i)^(n-1)) ÷ ((1＋i)^n-1)
+                float a = carloanTotalInputValue - (carloanTotalInputValue*carloanDownPaymentInputValue);    //贷款本金
+                double i = carloanRateInputValue * 0.01 / 12;      //月利率
+                int n = carloanTimeInputValue * 12;                                 //总还款期数
+                double perTermMoney = a * i * Math.pow((1+i),n)/(Math.pow((1+i),n) - 1);    //月均还款
+                double[][] months = new double[n][4];
+                for (int t = 0; t < n; t++) {
+                    months[t][0] = t + 1;
+                    months[t][1] = perTermMoney;
+                    months[t][2] = a * Math.pow(i, 2) * Math.pow((1 + i), t) / (Math.pow((1 + i), (t+1)) - 1);   //每月所还利息
+                    months[t][3] = perTermMoney - months[t][2];        //每月所还本金
                 }
+                //总还款 每月还款 x 总还款期数 总支付利息 总还款-贷款本金总额
+                double total = perTermMoney * n;
+                double interest = total - a;
+                //展示计算结果
+                final AlertDialog calculatorDataDialog = new AlertDialog.Builder(CarLoanActivity.this,R.style.Dialog_FS).setCancelable(true).create();
+                Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
+                calculatorDataDialog.show();
+                calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
+                //设置贷款类型 还款总额和总支付利息
+                TextView loanTypeTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.loanType);
+                loanTypeTextView.setText("等额本息");
+                TextView totalTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.total);
+                totalTextView.setText(String.format("%.1f",total) +" ( 元 )");
+                TextView interestTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.interest);
+                interestTextView.setText(String.format("%.1f",interest) +" ( 元 )");
+                /////
+                //关闭数据对话框
+                TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calculatorDataDialog.dismiss();
+                    }
 
+                });
+                //////
+
+                //动态计算并设置listview的高度
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                TextView loanTips = (TextView)calculatorDataDialogWindow.findViewById(R.id.loanTips); //小提示
+                LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle); //标题
+                TableLayout loanSubTitle = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.loanSubTitle); //副标题
+                ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);       //listview
+                LinearLayout loanFooter = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanFooter);   //底部
+
+                int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                loanTitle.measure(w, h);
+                loanSubTitle.measure(w, h);
+                loanFooter.measure(w, h);
+                loanTips.measure(w, h);
+
+                double lvHeight = metrics.heightPixels - loanTips.getMeasuredHeight() - loanTitle.getMeasuredHeight() - loanSubTitle.getMeasuredHeight() - loanFooter.getMeasuredHeight() ;
+                ViewGroup.LayoutParams lvLayoutParams = lv.getLayoutParams();
+                lvLayoutParams.height = (int)lvHeight;
+                lv.setLayoutParams(lvLayoutParams);
+                //////
+
+                TableAdapter tableAdapter = new TableAdapter(CarLoanActivity.this,months);
+                lv.setAdapter(tableAdapter);
+            } else if(carloanType == 2){
+
+                //等额本金
+                //计算公式 每月还款金额 = （贷款本金 / 还款月数）+（贷款本金 — 已归还本金累计额）×每月利率
+                double[][] months = new double[carloanTimeInputValue * 12][4];
+                float a = carloanTotalInputValue - (carloanTotalInputValue*carloanDownPaymentInputValue); //贷款本金
+                float perMonthLoan = a / (carloanTimeInputValue * 12);     //每月支付本金;
+                double interest = 0;                                       //总支付利息
+                for (int i = 0; i < carloanTimeInputValue * 12; i++) {
+                    //LogUtils.v(Float.parseFloat(loanRate));
+                    months[i][0] = i + 1;
+                    months[i][1] = perMonthLoan + (a - i * perMonthLoan) * carloanRateInputValue * 0.01 / 12;   //每月还款
+                    months[i][2] = (a - i * perMonthLoan) * carloanRateInputValue * 0.01 / 12;                  //每月利息
+                    months[i][3] = perMonthLoan;                                                                //每月本金
+                    interest += months[i][2];
+                }
+                //LogUtils.v(months);
+                double total = a + interest;             //总还款金额
+
+                //展示计算结果
+                final AlertDialog calculatorDataDialog = new AlertDialog.Builder(CarLoanActivity.this,R.style.Dialog_FS).setCancelable(true).create();
+                Window calculatorDataDialogWindow = calculatorDataDialog.getWindow();   //获取对话框window对象
+                calculatorDataDialog.show();
+                calculatorDataDialogWindow.setContentView(R.layout.calculator_data);
+                //设置贷款类型 还款总额和总支付利息
+                TextView loanTypeTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.loanType);
+                loanTypeTextView.setText("等额本金");
+                TextView totalTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.total);
+                totalTextView.setText(String.format("%.1f",total)+" ( 元 )");
+                TextView interestTextView = (TextView) calculatorDataDialogWindow.findViewById(R.id.interest);
+                interestTextView.setText(String.format("%.1f",interest) + " ( 元 )");
+                //关闭数据对话框
+                TextView close = (TextView) calculatorDataDialogWindow.findViewById(R.id.close);
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        calculatorDataDialog.dismiss();
+                    }
+
+                });
+
+                //显示还贷数据 addview 的方式显示 效率极低
+                //TableLayout calculateDataTable = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.calculateDataTable);
+                //calculateDataTable.setStretchAllColumns(true);
+
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                TextView loanTips = (TextView)calculatorDataDialogWindow.findViewById(R.id.loanTips); //小提示
+                LinearLayout loanTitle = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanTitle); //标题
+                TableLayout loanSubTitle = (TableLayout)calculatorDataDialogWindow.findViewById(R.id.loanSubTitle); //副标题
+                ListView lv = (ListView) calculatorDataDialogWindow.findViewById(R.id.calculateDataListView);       //listview
+                LinearLayout loanFooter = (LinearLayout)calculatorDataDialogWindow.findViewById(R.id.loanFooter);   //底部
+
+                int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                int h = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+                loanTitle.measure(w, h);
+                loanSubTitle.measure(w, h);
+                loanFooter.measure(w, h);
+                loanTips.measure(w, h);
+
+                double lvHeight = metrics.heightPixels - loanTips.getMeasuredHeight() - loanTitle.getMeasuredHeight() - loanSubTitle.getMeasuredHeight() - loanFooter.getMeasuredHeight() ;
+                ViewGroup.LayoutParams lvLayoutParams = lv.getLayoutParams();
+                lvLayoutParams.height = (int)lvHeight;
+                lv.setLayoutParams(lvLayoutParams);
+
+                TableAdapter tableAdapter = new TableAdapter(CarLoanActivity.this,months);
+                lv.setAdapter(tableAdapter);
+            }
             }
         });
     }
 
+    //初始化activity
     public void initial(){
         //维护一个公共的 loopview 对话框
         carloanDialog = new AlertDialog.Builder(CarLoanActivity.this).setCancelable(false).create();
@@ -92,7 +228,7 @@ public class CarLoanActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.gravity = Gravity.CENTER;
                 loopViewContainer.addView(loopView,layoutParams);
-                //确定车贷首付比例选择
+                //确定首付比例选择
                 TextView loanDownPaymentSure = (TextView) carloanWindow.findViewById(R.id._dialog_sure);
                 loanDownPaymentSure.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -100,11 +236,12 @@ public class CarLoanActivity extends AppCompatActivity {
                         carloanDialog.dismiss();
                         int value = intval(loopView.getSelectedItemValue());
                         carloanDownPaymentInput.setText(String.valueOf(value));    //直接setText一个整数会失效
-                        carloanDownPaymentInputValue = value/100;
+
+                        carloanDownPaymentInputValue = (float)value/100;
                         loopViewContainer.removeAllViews();     //因为Dialog是在外部维护的一个变量 所以关闭之后需要removewAllViews
                     }
                 });
-                //取消车贷期限选择
+                //取消首付比例选择
                 TextView carloanDownPaymentCancel = (TextView) carloanWindow.findViewById(R.id._dialog_cancel);
                 carloanDownPaymentCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -115,8 +252,6 @@ public class CarLoanActivity extends AppCompatActivity {
                 });
             }
         });
-        //车贷利率控件
-        carloanRateInput = (TextView) findViewById(R.id.carloanRateInput);
 
         //车贷期限输入控件
         carloanTimeInput = (TextView) findViewById(R.id.carloanTimeInput);
@@ -141,16 +276,19 @@ public class CarLoanActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         carloanDialog.dismiss();
-                        int carloanTime = loopView.getSelectedItem() + 1;//车贷期限
-                        carloanTimeInput.setText(carloanTime + "年");    //直接setText一个整数会失效
+                        carloanTimeInputValue = loopView.getSelectedItem() + 1;//车贷期限
+                        carloanTimeInput.setText(carloanTimeInputValue + "年");    //直接setText一个整数会失效
                         loopViewContainer.removeAllViews();     //因为Dialog是在外部维护的一个变量 所以关闭之后需要removewAllViews
                         //根据车贷期限修改 基准年利率
-                        if(carloanTime <= 1){
+                        if(carloanTimeInputValue <= 1){
                             carloanRateInput.setText("4.35");
-                        } else if(carloanTime <= 5){
+                            carloanRateInputValue = 4.35f;
+                        } else if(carloanTimeInputValue <= 5){
                             carloanRateInput.setText("4.75");
+                            carloanRateInputValue = 4.75f;
                         } else {
                             carloanRateInput.setText("4.90");
+                            carloanRateInputValue = 4.90f;
                         }
                     }
                 });
@@ -166,6 +304,28 @@ public class CarLoanActivity extends AppCompatActivity {
             }
         });
 
+        //车贷利率控件
+        carloanRateInput = (TextView) findViewById(R.id.carloanRateInput);
+
+        //还款方式
+        carloanTypeAveragePlus = (RadioButton) findViewById(R.id.averagePlus);
+        carloanTypeAverageCapital = (RadioButton) findViewById(R.id.averageCapital);
+        carloanTypeAveragePlus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked == true){
+                    carloanType = 1;
+                }
+            }
+        });
+        carloanTypeAverageCapital.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked == true){
+                    carloanType = 2;
+                }
+            }
+        });
 
     }
 
@@ -175,7 +335,6 @@ public class CarLoanActivity extends AppCompatActivity {
             loopView = new LoopView(CarLoanActivity.this);
         }
         //设置数据
-
         loopView.setItems(listData);
         //设置是否循环播放
         //loopView.setNotLoop();
@@ -215,5 +374,24 @@ public class CarLoanActivity extends AppCompatActivity {
             }
         }
         return Integer.parseInt(tempString);
+    }
+
+    //验证表单
+    private boolean validForm(){
+        //验证各输入控件的值是否合法
+        String carloanTotalInputValue_ = carloanTotalInput.getText().toString();
+        if(carloanTotalInputValue_.length() == 0){
+            Toast.makeText(CarLoanActivity.this, "请输入爱车价格", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            carloanTotalInputValue = (int)Float.parseFloat(carloanTotalInputValue_) * 10000;
+            //LogUtils.v(carloanTotalInputValue);
+        }
+        //LogUtils.v(carloanDownPaymentInputValue);
+        if(carloanTimeInputValue == 0){
+            Toast.makeText(CarLoanActivity.this, "请输入车贷期限", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 }

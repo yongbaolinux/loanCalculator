@@ -195,8 +195,7 @@
                     android:drawablePadding="2dp"
                     android:button="@null"
                     android:drawableLeft="@drawable/radio_"
-                    android:textSize="@dimen/carFormInput"
-                    />
+                    android:textSize="@dimen/carFormInput" />
 
                 <RadioButton
                     android:id="@+id/averageCapital"
