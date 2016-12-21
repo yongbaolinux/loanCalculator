@@ -40,9 +40,10 @@ public class CarLoanActivity extends AppCompatActivity {
     private float carloanRateInputValue = 0.0f;          //车贷基准年利率
     private int carloanType = 2;                         //还贷方式 1等额本息 2等额本金
 
-
+    private myApp myApplication;                         //维护一个application实例
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        myApplication = (myApp) getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_loan);
         initial();
@@ -61,15 +62,14 @@ public class CarLoanActivity extends AppCompatActivity {
                     float a = carloanTotalInputValue - (carloanTotalInputValue * carloanDownPaymentInputValue);    //贷款本金
                     double i = carloanRateInputValue * 0.01 / 12;      //月利率
                     int n = carloanTimeInputValue * 12;                                 //总还款期数
-                    myApp = (myApp)getApplication();
-                    calculator(CarLoanActivity.this,a,i,n,1);
+                    myApplication.calculator(CarLoanActivity.this,a,i,n,1);
                 } else if (carloanType == 2) {
                     //等额本金
                     //计算公式 每月还款金额 = （贷款本金 / 还款月数）+（贷款本金 — 已归还本金累计额）×每月利率
                     float a = carloanTotalInputValue - (carloanTotalInputValue * carloanDownPaymentInputValue); //贷款本金
                     double i = carloanRateInputValue * 0.01 / 12;      //月利率
                     int n = carloanTimeInputValue * 12;                //总还款期数
-                    calculator(CarLoanActivity.this, a, i, n, 2);
+                    myApplication.calculator(CarLoanActivity.this, a, i, n, 2);
                 }
             }
         });
