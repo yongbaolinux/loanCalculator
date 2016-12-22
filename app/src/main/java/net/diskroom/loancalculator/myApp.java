@@ -105,4 +105,11 @@ public class MyApp extends Application {
         TableAdapter tableAdapter = new TableAdapter(context,months);
         lv.setAdapter(tableAdapter);
     }
+
+    /**
+     * 应用统一风格对话框
+     */
+    public void showDialog(){
+
+    }
 }

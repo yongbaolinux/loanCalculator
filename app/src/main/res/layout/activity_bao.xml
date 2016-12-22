@@ -19,7 +19,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="存入金额"
-                android:id="@+id/carLoanTotal"
                 android:textSize="@dimen/carForm"
                 android:layout_column="0"
                 android:layout_gravity="center_vertical"/>
@@ -30,12 +29,12 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <EditText
-                    android:id="@+id/carloanTotalInput"
+                    android:id="@+id/baoTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:background="@null"
                     android:gravity="right"
+                    android:background="@null"
                     android:textCursorDrawable="@null"
                     android:hint="0"
                     android:textSize="@dimen/carFormInput"
@@ -49,8 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="万元"
-                    android:textSize="@dimen/carFormInput"
-                    android:id="@+id/loanTotalUnit" />
+                    android:textSize="@dimen/carFormInput" />
             </LinearLayout>
         </TableRow>
 
@@ -63,11 +61,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="万分收益"
-                android:id="@+id/carLoanDownPayment"
+                android:text="万份收益"
                 android:textSize="@dimen/carForm"/>
                 <EditText
-                    android:id="@+id/carLoanDownPaymentInput"
+                    android:id="@+id/baoRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
