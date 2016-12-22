@@ -277,9 +277,10 @@ public class CarLoanActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean onKeyDown(int keycode, KeyEvent keyEvent){
-        LogUtils.v("keydown");
-        return true;
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent){
+        LogUtils.v(keyCode);
+        LogUtils.v(keyEvent);
+        return super.onKeyDown(keyCode, keyEvent);
     }
 
 
