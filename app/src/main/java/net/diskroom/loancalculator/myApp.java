@@ -17,7 +17,7 @@ import android.widget.TextView;
  * Created by jsb-hdp-0 on 2016/12/21.
  */
 
-public class myApp extends Application {
+public class MyApp extends Application {
 
     /**
      * 弹出计算结果页面

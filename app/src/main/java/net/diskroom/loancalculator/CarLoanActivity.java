@@ -40,10 +40,10 @@ public class CarLoanActivity extends AppCompatActivity {
     private float carloanRateInputValue = 0.0f;          //车贷基准年利率
     private int carloanType = 2;                         //还贷方式 1等额本息 2等额本金
 
-    private myApp myApplication;                         //维护一个application实例
+    private MyApp myApplication;                         //维护一个application实例
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        myApplication = (myApp) getApplication();
+        myApplication = (MyApp) getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_loan);
         initial();
