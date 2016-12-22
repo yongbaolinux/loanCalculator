@@ -4,15 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
+import com.apkfuns.logutils.LogUtils;
+
+import static android.view.KeyEvent.KEYCODE_BACK;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private PopupMenu mainMenu;
+    private long mClickTime = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 连续按两次回退键退出应用
+     * @param keyCode   按键代码
+     * @param keyEvent
+     * @return
+     */
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent){
+        if(keyCode == KEYCODE_BACK){
+            long currentTime = System.currentTimeMillis();
+            if((currentTime - mClickTime) > 2000){
+                mClickTime = currentTime;
+                Toast.makeText(getApplicationContext(), "再按一次退出", Toast.LENGTH_SHORT).show();
+            } else {
+                finish();
+                System.exit(0);
+            }
+        }
+        return true;
     }
 
 

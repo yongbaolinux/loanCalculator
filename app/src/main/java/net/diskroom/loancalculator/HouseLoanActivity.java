@@ -45,7 +45,7 @@ import com.apkfuns.logutils.LogUtils;
 import net.diskroom.loancalculator.wheelview.LoopView;
 import net.diskroom.loancalculator.wheelview.OnItemSelectedListener;
 
-public class HouseLoanActivity extends AppCompatActivity {
+public class HouseLoanActivity extends BaseActivity {
     private LinearLayout.LayoutParams layoutParams;
     private LinearLayout wheelviewContainer;
 

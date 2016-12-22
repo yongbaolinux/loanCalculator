@@ -23,7 +23,7 @@ import net.diskroom.loancalculator.wheelview.OnItemSelectedListener;
 
 import java.util.ArrayList;
 
-public class CarLoanActivity extends AppCompatActivity {
+public class CarLoanActivity extends BaseActivity {
     private EditText carloanTotalInput;             //车价输入框对象
     private TextView carloanDownPaymentInput;       //首付比例控件对象
     private TextView carloanTimeInput;              //车贷期数控件对象
