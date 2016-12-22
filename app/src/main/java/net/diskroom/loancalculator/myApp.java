@@ -106,10 +106,5 @@ public class MyApp extends Application {
         lv.setAdapter(tableAdapter);
     }
 
-    /**
-     * 应用统一风格对话框
-     */
-    public void showDialog(){
 
-    }
 }

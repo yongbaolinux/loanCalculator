@@ -5,19 +5,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apkfuns.logutils.LogUtils;
 
-public class BaoActivity extends AppCompatActivity {
+public class BaoActivity extends BaseActivity {
     private Button calculator;
     private EditText baoTotal;
     private EditText baoRate;
 
     private float total = 0f;
     private float rate = 0f;
+
+    private MyApp myApplication;                         //维护一个application实例
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        myApplication = (MyApp) getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bao);
         inital();
@@ -27,7 +31,9 @@ public class BaoActivity extends AppCompatActivity {
                 if(valid() == false){
                     return;
                 }
-
+                TextView textView = new TextView(getApplicationContext());
+                textView.setText("预估您的当天收益为"+total*rate);
+                showDialog(textView);
             }
         });
     }
