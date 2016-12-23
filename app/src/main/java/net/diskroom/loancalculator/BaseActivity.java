@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.apkfuns.logutils.LogUtils;
+
 public class BaseActivity extends AppCompatActivity {
 
     private AlertDialog commonDialog;       //维护一个全局的风格统一的dialog
@@ -44,5 +46,17 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void stop(){
 
+    }
+
+    /**
+     * float 类型数据处理
+     * @param string 待处理的字符串
+     */
+    public float floatVal(String string){
+        if(string.indexOf('.') != string.lastIndexOf('.')){
+            return Float.parseFloat(string.substring(0,string.indexOf('.',string.indexOf('.')+1)));
+        } else {
+            return Float.parseFloat(string);
+        }
     }
 }

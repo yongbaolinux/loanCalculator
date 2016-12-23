@@ -85,13 +85,13 @@ public class BaoActivity extends BaseActivity {
             Toast.makeText(getApplicationContext(),"金额不能为空",Toast.LENGTH_LONG).show();
             return false;
         }
-        total = Float.parseFloat(temp);
+        total = floatVal(temp);
         String temp_ = baoRate.getText().toString();
         if(temp_.equals("") || temp_.equals(".")){
             Toast.makeText(getApplicationContext(),"万份收益不能为空",Toast.LENGTH_LONG).show();
             return false;
         }
-        rate = Float.parseFloat(temp_);
+        rate = floatVal(temp_);
         return true;
     }
 }
