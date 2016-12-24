@@ -1,6 +1,8 @@
 package net.diskroom.loancalculator;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +13,8 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.apkfuns.logutils.LogUtils;
+
+import java.util.List;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
 
@@ -51,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.show_menu) {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "分享文本");
             shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "【推荐】贷款计算君,一款帮你计算贷款月供的工具。<a href='http://www.baidu.com'>点我下载</a>");
             startActivity(Intent.createChooser(shareIntent, "分享到"));
             return true;
         }
