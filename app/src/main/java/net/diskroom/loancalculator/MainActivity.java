@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class MainActivity extends BaseActivity {
     private long mClickTime = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,7 +36,7 @@ public class MainActivity extends BaseActivity {
                         .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());*/
-        ShareSDK.initSDK(this);
+        //ShareSDK.initSDK(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,12 +52,11 @@ public class MainActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
         if (id == R.id.show_menu) {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "【推荐】贷款计算君,一款帮你计算贷款月供的工具。<a href='http://www.baidu.com'>点我下载</a>");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "【推荐】贷款计算君,一款帮你计算贷款月供的工具。http://www.baidu.com");
             startActivity(Intent.createChooser(shareIntent, "分享到"));
             //showShare();
             return true;
