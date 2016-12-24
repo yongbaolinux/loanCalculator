@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">贷款理财君</string>
-    <string name="title_activity_main">贷款理财君</string>
+    <string name="app_name">贷款计算君</string>
     <string name="carButton">车贷</string>
     <string name="houseButton">房贷</string>
     <string name="baoButton">余额宝</string>

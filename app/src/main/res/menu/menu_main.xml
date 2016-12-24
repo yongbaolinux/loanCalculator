@@ -2,9 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="net.diskroom.loancalculator.MainActivity">
+
     <item
         android:id="@+id/show_menu"
-        android:title=""
+        android:title="分享"
         android:icon="@drawable/share512"
         app:showAsAction="always" />
 </menu>
