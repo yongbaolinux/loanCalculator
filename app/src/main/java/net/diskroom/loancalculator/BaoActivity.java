@@ -1,14 +1,14 @@
 package net.diskroom.loancalculator;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.apkfuns.logutils.LogUtils;
 
 public class BaoActivity extends BaseActivity {
     private Button calculator;
@@ -16,7 +16,7 @@ public class BaoActivity extends BaseActivity {
     private EditText baoRate;
 
     private float total = 0f;
-    private float rate = 0f;
+    private float rate = 0.7f;
 
     private MyApp myApplication;                         //维护一个application实例
     @Override
@@ -31,9 +31,7 @@ public class BaoActivity extends BaseActivity {
                 if(valid() == false){
                     return;
                 }
-                TextView textView = new TextView(getApplicationContext());
-                textView.setText("预估您的当天收益为"+total*rate);
-                showDialog(textView);
+                showDialog("预估您的当天收益为 "+String.format("%.2f",total*rate)+" 元");
             }
         });
     }
@@ -43,6 +41,41 @@ public class BaoActivity extends BaseActivity {
         calculator = (Button) findViewById(R.id.calculator);
         baoTotal = (EditText) findViewById(R.id.baoTotal);
         baoRate = (EditText) findViewById(R.id.baoRate);
+
+        //绑定各控件响应事件
+        baoTotal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                baoTotal.setText("");
+            }
+        });
+
+        baoTotal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    baoTotal.setText("");
+                }
+            }
+        });
+
+        baoRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    baoRate.setText("");
+                    baoRate.setHint("");
+            }
+        });
+
+        baoRate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    baoRate.setText("");
+                    baoRate.setHint("");
+                }
+            }
+        });
     }
 
     //验证表单

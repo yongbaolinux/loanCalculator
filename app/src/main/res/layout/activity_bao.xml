@@ -67,13 +67,14 @@
                     android:id="@+id/baoRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:gravity="right"
                     android:layout_span="2"
-                    android:hint="0.7000"
+                    android:text="0.7000"
                     android:maxLines="1"
                     android:background="@null"
                     android:textCursorDrawable="@null"
-                    android:textSize="@dimen/carFormInput"
+                    android:textColor="@color/colorInput"
+                    android:textSize="@dimen/baoFormInput"
                     android:digits="1234567890."/>
         </TableRow>
 

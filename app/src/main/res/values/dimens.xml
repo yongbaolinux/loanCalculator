@@ -15,4 +15,5 @@
     <dimen name="carFormInput">18sp</dimen>
     <dimen name="carFormRowPaddingTop">12dp</dimen>
     <dimen name="carFormRowPaddingBottom">12dp</dimen>
+    <dimen name="baoFormInput">18sp</dimen>
 </resources>

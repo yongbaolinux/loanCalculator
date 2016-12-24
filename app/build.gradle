@@ -32,4 +32,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.facebook.stetho:stetho:1.1.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile files('libs/MobCommons-2016.1107.1809.jar')
 }

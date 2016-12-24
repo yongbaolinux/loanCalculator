@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.apkfuns.logutils.LogUtils;
 
@@ -21,15 +23,22 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * 应用统一风格对话框
      */
-    public void showDialog(View view){
-        //维护一个公共的 loopview 对话框
+    public void showDialog(String string){
+        //维护一个公共对话框
         commonDialog = new AlertDialog.Builder(BaseActivity.this).setCancelable(false).create();
         Window commonDialogWindow = commonDialog.getWindow();
         //commonDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         commonDialog.show();
-        commonDialogWindow.setContentView(R.layout.loan_time_wheel_container);
-        LinearLayout commonDialogLinearLayout = (LinearLayout)commonDialogWindow.findViewById(R.id.wheelviewContainer);
-        commonDialogLinearLayout.addView(view);
+        commonDialogWindow.setContentView(R.layout.common_dialog);
+        TextView commonDialogContent = (TextView)commonDialogWindow.findViewById(R.id.commonDialogContent);
+        commonDialogContent.setText(string);
+        TextView sure = (TextView) commonDialogWindow.findViewById(R.id._dialog_sure);
+        sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commonDialog.dismiss();
+            }
+        });
     }
 
     /**
