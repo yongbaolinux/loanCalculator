@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorCircleButton">#8192d6</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorInput">#666666</color>
+    <color name="colorRadio">#666666</color>
 </resources>

@@ -5,7 +5,9 @@
     <item
         android:id="@+id/show_menu"
         android:title=""
-        android:icon="@drawable/share48"
+        android:icon="@drawable/share512"
         app:showAsAction="always" />
 </menu>
+
+
 

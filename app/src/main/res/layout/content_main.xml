@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="net.diskrom.loancalculator.MainActivity"
+    tools:context="net.diskroom.loancalculator.MainActivity"
     tools:showIn="@layout/activity_main"
     android:background="@drawable/bg">
 
     <net.diskroom.loancalculator.DrawView
+        android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:exampleDimension="24sp"
         app:exampleString=""
         android:layout_gravity="center_horizontal" />
 </RelativeLayout>

@@ -7,4 +7,13 @@
     <dimen name="toolbar_padding">8dp</dimen>
     <dimen name="toolbar_fontsize">18sp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="houseForm">20sp</dimen>
+    <dimen name="houseFormInput">18sp</dimen>
+    <dimen name="houseFormRowPaddingTop">12dp</dimen>
+    <dimen name="houseFormRowPaddingBottom">12dp</dimen>
+    <dimen name="carForm">20sp</dimen>
+    <dimen name="carFormInput">18sp</dimen>
+    <dimen name="carFormRowPaddingTop">12dp</dimen>
+    <dimen name="carFormRowPaddingBottom">12dp</dimen>
+    <dimen name="baoFormInput">18sp</dimen>
 </resources>
