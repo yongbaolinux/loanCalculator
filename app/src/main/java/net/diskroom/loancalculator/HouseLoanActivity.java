@@ -3,18 +3,9 @@ package net.diskroom.loancalculator;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.media.audiofx.LoudnessEnhancer;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.BoringLayout;
-import android.text.Layout;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;

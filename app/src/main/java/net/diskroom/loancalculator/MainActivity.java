@@ -25,9 +25,9 @@ public class MainActivity extends BaseActivity {
         //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        /*Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);*/
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
