@@ -2,6 +2,7 @@ package net.diskroom.loancalculator;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,10 @@ public class BaoActivity extends BaseActivity {
         myApplication = (MyApp) getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bao);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+
         inital();
         calculator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +86,10 @@ public class BaoActivity extends BaseActivity {
     //验证表单
     public boolean valid(){
         String temp = baoTotal.getText().toString();
-        if(temp.equals("") || temp.equals(".")){
+        if((total = floatVal(temp)) <= 0){
             Toast.makeText(getApplicationContext(),"金额不能为空",Toast.LENGTH_LONG).show();
             return false;
         }
-        total = floatVal(temp);
         String temp_ = baoRate.getText().toString();
         if(temp_.equals("") || temp_.equals(".")){
             Toast.makeText(getApplicationContext(),"万份收益不能为空",Toast.LENGTH_LONG).show();

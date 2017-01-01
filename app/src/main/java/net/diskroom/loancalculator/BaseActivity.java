@@ -53,10 +53,21 @@ public class BaseActivity extends AppCompatActivity {
      * @param string 待处理的字符串
      */
     public float floatVal(String string){
-        if(string.indexOf('.') != string.lastIndexOf('.')){
-            return Float.parseFloat(string.substring(0,string.indexOf('.',string.indexOf('.')+1)));
+        if(string.replace(".","").length() == 0) {
+            //全部为小数点直接返回0
+            return 0;
         } else {
-            return Float.parseFloat(string);
+            if(string.indexOf('.') != string.lastIndexOf('.')){
+                //有两个及两个以前小数点 舍弃第二个小数点及后面的字符
+                String temp = string.substring(0,string.indexOf('.',string.indexOf('.')+1));
+                if(temp.equals(".")){
+                    return 0;
+                } else {
+                    return Float.parseFloat(temp);
+                }
+            } else {
+                return Float.parseFloat(string);
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ package net.diskroom.loancalculator;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,6 +50,10 @@ public class CarLoanActivity extends BaseActivity {
         myApplication = (MyApp) getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_loan);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+
         initial();
         //计算
         calculator = (Button) findViewById(R.id.calculator);
@@ -262,12 +267,13 @@ public class CarLoanActivity extends BaseActivity {
     private boolean validForm() {
         //验证各输入控件的值是否合法
         String carloanTotalInputValue_ = carloanTotalInput.getText().toString();
-        if (carloanTotalInputValue_.length() == 0) {
+        float temp;
+        if ((temp = floatVal(carloanTotalInputValue_)) <= 0) {
             Toast.makeText(CarLoanActivity.this, "请输入爱车价格", Toast.LENGTH_LONG).show();
             return false;
         } else {
-            carloanTotalInputValue = (int) Float.parseFloat(carloanTotalInputValue_) * 10000;
-            //LogUtils.v(carloanTotalInputValue);
+            carloanTotalInputValue = (int) temp * 10000;
+            LogUtils.v(carloanTotalInputValue);
         }
         //LogUtils.v(carloanDownPaymentInputValue);
         if (carloanTimeInputValue == 0) {
